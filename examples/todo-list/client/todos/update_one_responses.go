@@ -7,8 +7,8 @@ import (
 	"fmt"
 
 	"github.com/go-swagger/go-swagger/client"
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/models"
 )
@@ -17,7 +17,7 @@ type UpdateOneReader struct {
 	formats strfmt.Registry
 }
 
-func (o *UpdateOneReader) ReadResponse(response client.Response, consumer httpkit.Consumer) (interface{}, error) {
+func (o *UpdateOneReader) ReadResponse(response client.Response, consumer toolkit.Consumer) (interface{}, error) {
 	switch response.Code() {
 
 	case 200:
@@ -53,7 +53,7 @@ func (o *UpdateOneOK) Error() string {
 	return fmt.Sprintf("[PUT /{id}][%d] updateOneOK  %+v", 200, o.Payload)
 }
 
-func (o *UpdateOneOK) readResponse(response client.Response, consumer httpkit.Consumer, formats strfmt.Registry) error {
+func (o *UpdateOneOK) readResponse(response client.Response, consumer toolkit.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Item)
 
@@ -91,7 +91,7 @@ func (o *UpdateOneDefault) Error() string {
 	return fmt.Sprintf("[PUT /{id}][%d] updateOne default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *UpdateOneDefault) readResponse(response client.Response, consumer httpkit.Consumer, formats strfmt.Registry) error {
+func (o *UpdateOneDefault) readResponse(response client.Response, consumer toolkit.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

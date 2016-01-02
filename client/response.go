@@ -17,7 +17,7 @@ package client
 import (
 	"io"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // A Response represents a client response
@@ -30,15 +30,15 @@ type Response interface {
 }
 
 // A ResponseReaderFunc turns a function into a ResponseReader interface implementation
-type ResponseReaderFunc func(Response, httpkit.Consumer) (interface{}, error)
+type ResponseReaderFunc func(Response, toolkit.Consumer) (interface{}, error)
 
 // ReadResponse reads the response
-func (read ResponseReaderFunc) ReadResponse(resp Response, consumer httpkit.Consumer) (interface{}, error) {
+func (read ResponseReaderFunc) ReadResponse(resp Response, consumer toolkit.Consumer) (interface{}, error) {
 	return read(resp, consumer)
 }
 
 // A ResponseReader is an interface for things want to read a response.
 // An application of this is to create structs from response values
 type ResponseReader interface {
-	ReadResponse(Response, httpkit.Consumer) (interface{}, error)
+	ReadResponse(Response, toolkit.Consumer) (interface{}, error)
 }

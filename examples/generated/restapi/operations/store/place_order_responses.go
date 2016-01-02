@@ -6,7 +6,7 @@ package store
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/generated/models"
 )
@@ -33,7 +33,7 @@ func (o *PlaceOrderOK) WithPayload(payload *models.Order) *PlaceOrderOK {
 }
 
 // WriteResponse to the client
-func (o *PlaceOrderOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *PlaceOrderOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {
@@ -56,7 +56,7 @@ func NewPlaceOrderBadRequest() PlaceOrderBadRequest {
 }
 
 // WriteResponse to the client
-func (o *PlaceOrderBadRequest) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *PlaceOrderBadRequest) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(400)
 }

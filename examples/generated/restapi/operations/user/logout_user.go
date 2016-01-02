@@ -6,24 +6,24 @@ package user
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // LogoutUserHandlerFunc turns a function with the right signature into a logout user handler
-type LogoutUserHandlerFunc func() middleware.Responder
+type LogoutUserHandlerFunc func() httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn LogoutUserHandlerFunc) Handle() middleware.Responder {
+func (fn LogoutUserHandlerFunc) Handle() httpkit.Responder {
 	return fn()
 }
 
 // LogoutUserHandler interface for that can handle valid logout user params
 type LogoutUserHandler interface {
-	Handle() middleware.Responder
+	Handle() httpkit.Responder
 }
 
 // NewLogoutUser creates a new http.Handler for the logout user operation
-func NewLogoutUser(ctx *middleware.Context, handler LogoutUserHandler) *LogoutUser {
+func NewLogoutUser(ctx *httpkit.Context, handler LogoutUserHandler) *LogoutUser {
 	return &LogoutUser{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Logs out current logged in user session
 
 */
 type LogoutUser struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Handler LogoutUserHandler
 }
 

@@ -6,24 +6,24 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // AddPetHandlerFunc turns a function with the right signature into a add pet handler
-type AddPetHandlerFunc func(AddPetParams, interface{}) middleware.Responder
+type AddPetHandlerFunc func(AddPetParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn AddPetHandlerFunc) Handle(params AddPetParams, principal interface{}) middleware.Responder {
+func (fn AddPetHandlerFunc) Handle(params AddPetParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // AddPetHandler interface for that can handle valid add pet params
 type AddPetHandler interface {
-	Handle(AddPetParams, interface{}) middleware.Responder
+	Handle(AddPetParams, interface{}) httpkit.Responder
 }
 
 // NewAddPet creates a new http.Handler for the add pet operation
-func NewAddPet(ctx *middleware.Context, handler AddPetHandler) *AddPet {
+func NewAddPet(ctx *httpkit.Context, handler AddPetHandler) *AddPet {
 	return &AddPet{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Add a new pet to the store
 
 */
 type AddPet struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  AddPetParams
 	Handler AddPetHandler
 }

@@ -6,24 +6,24 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // FindPetsByStatusHandlerFunc turns a function with the right signature into a find pets by status handler
-type FindPetsByStatusHandlerFunc func(FindPetsByStatusParams, interface{}) middleware.Responder
+type FindPetsByStatusHandlerFunc func(FindPetsByStatusParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn FindPetsByStatusHandlerFunc) Handle(params FindPetsByStatusParams, principal interface{}) middleware.Responder {
+func (fn FindPetsByStatusHandlerFunc) Handle(params FindPetsByStatusParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // FindPetsByStatusHandler interface for that can handle valid find pets by status params
 type FindPetsByStatusHandler interface {
-	Handle(FindPetsByStatusParams, interface{}) middleware.Responder
+	Handle(FindPetsByStatusParams, interface{}) httpkit.Responder
 }
 
 // NewFindPetsByStatus creates a new http.Handler for the find pets by status operation
-func NewFindPetsByStatus(ctx *middleware.Context, handler FindPetsByStatusHandler) *FindPetsByStatus {
+func NewFindPetsByStatus(ctx *httpkit.Context, handler FindPetsByStatusHandler) *FindPetsByStatus {
 	return &FindPetsByStatus{Context: ctx, Handler: handler}
 }
 
@@ -35,7 +35,7 @@ Multiple status values can be provided with comma seperated strings
 
 */
 type FindPetsByStatus struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  FindPetsByStatusParams
 	Handler FindPetsByStatusHandler
 }

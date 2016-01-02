@@ -6,24 +6,24 @@ package store
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // DeleteOrderHandlerFunc turns a function with the right signature into a delete order handler
-type DeleteOrderHandlerFunc func(DeleteOrderParams) middleware.Responder
+type DeleteOrderHandlerFunc func(DeleteOrderParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn DeleteOrderHandlerFunc) Handle(params DeleteOrderParams) middleware.Responder {
+func (fn DeleteOrderHandlerFunc) Handle(params DeleteOrderParams) httpkit.Responder {
 	return fn(params)
 }
 
 // DeleteOrderHandler interface for that can handle valid delete order params
 type DeleteOrderHandler interface {
-	Handle(DeleteOrderParams) middleware.Responder
+	Handle(DeleteOrderParams) httpkit.Responder
 }
 
 // NewDeleteOrder creates a new http.Handler for the delete order operation
-func NewDeleteOrder(ctx *middleware.Context, handler DeleteOrderHandler) *DeleteOrder {
+func NewDeleteOrder(ctx *httpkit.Context, handler DeleteOrderHandler) *DeleteOrder {
 	return &DeleteOrder{Context: ctx, Handler: handler}
 }
 
@@ -35,7 +35,7 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 */
 type DeleteOrder struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  DeleteOrderParams
 	Handler DeleteOrderHandler
 }

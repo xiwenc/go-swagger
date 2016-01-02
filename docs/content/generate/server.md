@@ -69,7 +69,7 @@ import (
   "net/http"
 
   "github.com/go-swagger/go-swagger/errors"
-  "github.com/go-swagger/go-swagger/httpkit/middleware"
+  "github.com/go-swagger/go-swagger/httpkit"
   "github.com/gorilla/context"
 )
 
@@ -122,8 +122,8 @@ package main
 
 import (
 	"github.com/go-swagger/go-swagger/errors"
+	"github.com/go-swagger/go-swagger/toolkit"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/restapi/operations"
 	"github.com/go-swagger/go-swagger/examples/todo-list/restapi/operations/todos"

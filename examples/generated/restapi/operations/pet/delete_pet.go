@@ -6,24 +6,24 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // DeletePetHandlerFunc turns a function with the right signature into a delete pet handler
-type DeletePetHandlerFunc func(DeletePetParams, interface{}) middleware.Responder
+type DeletePetHandlerFunc func(DeletePetParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn DeletePetHandlerFunc) Handle(params DeletePetParams, principal interface{}) middleware.Responder {
+func (fn DeletePetHandlerFunc) Handle(params DeletePetParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // DeletePetHandler interface for that can handle valid delete pet params
 type DeletePetHandler interface {
-	Handle(DeletePetParams, interface{}) middleware.Responder
+	Handle(DeletePetParams, interface{}) httpkit.Responder
 }
 
 // NewDeletePet creates a new http.Handler for the delete pet operation
-func NewDeletePet(ctx *middleware.Context, handler DeletePetHandler) *DeletePet {
+func NewDeletePet(ctx *httpkit.Context, handler DeletePetHandler) *DeletePet {
 	return &DeletePet{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Deletes a pet
 
 */
 type DeletePet struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  DeletePetParams
 	Handler DeletePetHandler
 }

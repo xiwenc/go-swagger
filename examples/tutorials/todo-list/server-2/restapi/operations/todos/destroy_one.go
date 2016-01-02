@@ -6,24 +6,24 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // DestroyOneHandlerFunc turns a function with the right signature into a destroy one handler
-type DestroyOneHandlerFunc func(DestroyOneParams) middleware.Responder
+type DestroyOneHandlerFunc func(DestroyOneParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn DestroyOneHandlerFunc) Handle(params DestroyOneParams) middleware.Responder {
+func (fn DestroyOneHandlerFunc) Handle(params DestroyOneParams) httpkit.Responder {
 	return fn(params)
 }
 
 // DestroyOneHandler interface for that can handle valid destroy one params
 type DestroyOneHandler interface {
-	Handle(DestroyOneParams) middleware.Responder
+	Handle(DestroyOneParams) httpkit.Responder
 }
 
 // NewDestroyOne creates a new http.Handler for the destroy one operation
-func NewDestroyOne(ctx *middleware.Context, handler DestroyOneHandler) *DestroyOne {
+func NewDestroyOne(ctx *httpkit.Context, handler DestroyOneHandler) *DestroyOne {
 	return &DestroyOne{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ DestroyOne destroy one API
 
 */
 type DestroyOne struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  DestroyOneParams
 	Handler DestroyOneHandler
 }

@@ -6,24 +6,24 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // UpdatePetHandlerFunc turns a function with the right signature into a update pet handler
-type UpdatePetHandlerFunc func(UpdatePetParams, interface{}) middleware.Responder
+type UpdatePetHandlerFunc func(UpdatePetParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdatePetHandlerFunc) Handle(params UpdatePetParams, principal interface{}) middleware.Responder {
+func (fn UpdatePetHandlerFunc) Handle(params UpdatePetParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // UpdatePetHandler interface for that can handle valid update pet params
 type UpdatePetHandler interface {
-	Handle(UpdatePetParams, interface{}) middleware.Responder
+	Handle(UpdatePetParams, interface{}) httpkit.Responder
 }
 
 // NewUpdatePet creates a new http.Handler for the update pet operation
-func NewUpdatePet(ctx *middleware.Context, handler UpdatePetHandler) *UpdatePet {
+func NewUpdatePet(ctx *httpkit.Context, handler UpdatePetHandler) *UpdatePet {
 	return &UpdatePet{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Update an existing pet
 
 */
 type UpdatePet struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  UpdatePetParams
 	Handler UpdatePetHandler
 }

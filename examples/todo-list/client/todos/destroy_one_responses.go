@@ -7,8 +7,8 @@ import (
 	"fmt"
 
 	"github.com/go-swagger/go-swagger/client"
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/models"
 )
@@ -17,7 +17,7 @@ type DestroyOneReader struct {
 	formats strfmt.Registry
 }
 
-func (o *DestroyOneReader) ReadResponse(response client.Response, consumer httpkit.Consumer) (interface{}, error) {
+func (o *DestroyOneReader) ReadResponse(response client.Response, consumer toolkit.Consumer) (interface{}, error) {
 	switch response.Code() {
 
 	case 204:
@@ -52,7 +52,7 @@ func (o *DestroyOneNoContent) Error() string {
 	return fmt.Sprintf("[DELETE /{id}][%d] destroyOneNoContent ", 204)
 }
 
-func (o *DestroyOneNoContent) readResponse(response client.Response, consumer httpkit.Consumer, formats strfmt.Registry) error {
+func (o *DestroyOneNoContent) readResponse(response client.Response, consumer toolkit.Consumer, formats strfmt.Registry) error {
 
 	return nil
 }
@@ -83,7 +83,7 @@ func (o *DestroyOneDefault) Error() string {
 	return fmt.Sprintf("[DELETE /{id}][%d] destroyOne default  %+v", o._statusCode, o.Payload)
 }
 
-func (o *DestroyOneDefault) readResponse(response client.Response, consumer httpkit.Consumer, formats strfmt.Registry) error {
+func (o *DestroyOneDefault) readResponse(response client.Response, consumer toolkit.Consumer, formats strfmt.Registry) error {
 
 	o.Payload = new(models.Error)
 

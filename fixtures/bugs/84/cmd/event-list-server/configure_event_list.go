@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/fixtures/bugs/84/restapi/operations"
 	"github.com/go-swagger/go-swagger/fixtures/bugs/84/restapi/operations/events"
@@ -17,24 +17,24 @@ func configureAPI(api *operations.EventListAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
 
-	api.JSONConsumer = httpkit.JSONConsumer()
+	api.JSONConsumer = toolkit.JSONConsumer()
 
-	api.JSONProducer = httpkit.JSONProducer()
+	api.JSONProducer = toolkit.JSONProducer()
 
-	api.EventsDeleteEventByIDHandler = events.DeleteEventByIDHandlerFunc(func(params events.DeleteEventByIDParams) middleware.Responder {
-		return middleware.NotImplemented("operation events.DeleteEventByID has not yet been implemented")
+	api.EventsDeleteEventByIDHandler = events.DeleteEventByIDHandlerFunc(func(params events.DeleteEventByIDParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation events.DeleteEventByID has not yet been implemented")
 	})
-	api.EventsGetEventByIDHandler = events.GetEventByIDHandlerFunc(func(params events.GetEventByIDParams) middleware.Responder {
-		return middleware.NotImplemented("operation events.GetEventByID has not yet been implemented")
+	api.EventsGetEventByIDHandler = events.GetEventByIDHandlerFunc(func(params events.GetEventByIDParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation events.GetEventByID has not yet been implemented")
 	})
-	api.EventsGetEventsHandler = events.GetEventsHandlerFunc(func() middleware.Responder {
-		return middleware.NotImplemented("operation events.GetEvents has not yet been implemented")
+	api.EventsGetEventsHandler = events.GetEventsHandlerFunc(func() httpkit.Responder {
+		return httpkit.NotImplemented("operation events.GetEvents has not yet been implemented")
 	})
-	api.EventsPostEventHandler = events.PostEventHandlerFunc(func(params events.PostEventParams) middleware.Responder {
-		return middleware.NotImplemented("operation events.PostEvent has not yet been implemented")
+	api.EventsPostEventHandler = events.PostEventHandlerFunc(func(params events.PostEventParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation events.PostEvent has not yet been implemented")
 	})
-	api.EventsPutEventByIDHandler = events.PutEventByIDHandlerFunc(func(params events.PutEventByIDParams) middleware.Responder {
-		return middleware.NotImplemented("operation events.PutEventByID has not yet been implemented")
+	api.EventsPutEventByIDHandler = events.PutEventByIDHandlerFunc(func(params events.PutEventByIDParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation events.PutEventByID has not yet been implemented")
 	})
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))

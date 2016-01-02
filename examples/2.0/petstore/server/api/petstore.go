@@ -24,10 +24,10 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
-	"github.com/go-swagger/go-swagger/httpkit/middleware/untyped"
+	"github.com/go-swagger/go-swagger/httpkit/untyped"
 	"github.com/go-swagger/go-swagger/spec"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // NewPetstore creates a new petstore api handler
@@ -43,15 +43,15 @@ func NewPetstore() (http.Handler, error) {
 	api.RegisterOperation("delete", "/pets/{id}", deletePet)
 	api.RegisterOperation("get", "/pets/{id}", getPetByID)
 
-	return middleware.Serve(spec, api), nil
+	return httpkit.Serve(spec, api), nil
 }
 
-var getAllPets = httpkit.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
+var getAllPets = toolkit.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
 	fmt.Println("getAllPets")
 	spew.Println(data)
 	return pets, nil
 })
-var createPet = httpkit.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
+var createPet = toolkit.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
 	fmt.Println("createPet")
 	spew.Println(data)
 	body := data.(map[string]interface{})["pet"]
@@ -63,7 +63,7 @@ var createPet = httpkit.OperationHandlerFunc(func(data interface{}) (interface{}
 	return body, nil
 })
 
-var deletePet = httpkit.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
+var deletePet = toolkit.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
 	fmt.Println("deletePet")
 	spew.Println(data)
 	id := data.(map[string]interface{})["id"].(int64)
@@ -71,7 +71,7 @@ var deletePet = httpkit.OperationHandlerFunc(func(data interface{}) (interface{}
 	return nil, nil
 })
 
-var getPetByID = httpkit.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
+var getPetByID = toolkit.OperationHandlerFunc(func(data interface{}) (interface{}, error) {
 	fmt.Println("getPetByID")
 	spew.Println(data)
 	id := data.(map[string]interface{})["id"].(int64)

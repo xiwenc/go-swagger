@@ -6,24 +6,24 @@ package user
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // CreateUsersWithArrayInputHandlerFunc turns a function with the right signature into a create users with array input handler
-type CreateUsersWithArrayInputHandlerFunc func(CreateUsersWithArrayInputParams) middleware.Responder
+type CreateUsersWithArrayInputHandlerFunc func(CreateUsersWithArrayInputParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn CreateUsersWithArrayInputHandlerFunc) Handle(params CreateUsersWithArrayInputParams) middleware.Responder {
+func (fn CreateUsersWithArrayInputHandlerFunc) Handle(params CreateUsersWithArrayInputParams) httpkit.Responder {
 	return fn(params)
 }
 
 // CreateUsersWithArrayInputHandler interface for that can handle valid create users with array input params
 type CreateUsersWithArrayInputHandler interface {
-	Handle(CreateUsersWithArrayInputParams) middleware.Responder
+	Handle(CreateUsersWithArrayInputParams) httpkit.Responder
 }
 
 // NewCreateUsersWithArrayInput creates a new http.Handler for the create users with array input operation
-func NewCreateUsersWithArrayInput(ctx *middleware.Context, handler CreateUsersWithArrayInputHandler) *CreateUsersWithArrayInput {
+func NewCreateUsersWithArrayInput(ctx *httpkit.Context, handler CreateUsersWithArrayInputHandler) *CreateUsersWithArrayInput {
 	return &CreateUsersWithArrayInput{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Creates list of users with given input array
 
 */
 type CreateUsersWithArrayInput struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  CreateUsersWithArrayInputParams
 	Handler CreateUsersWithArrayInputHandler
 }

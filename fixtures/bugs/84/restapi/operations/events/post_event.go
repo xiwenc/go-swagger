@@ -6,24 +6,24 @@ package events
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // PostEventHandlerFunc turns a function with the right signature into a post event handler
-type PostEventHandlerFunc func(PostEventParams) middleware.Responder
+type PostEventHandlerFunc func(PostEventParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn PostEventHandlerFunc) Handle(params PostEventParams) middleware.Responder {
+func (fn PostEventHandlerFunc) Handle(params PostEventParams) httpkit.Responder {
 	return fn(params)
 }
 
 // PostEventHandler interface for that can handle valid post event params
 type PostEventHandler interface {
-	Handle(PostEventParams) middleware.Responder
+	Handle(PostEventParams) httpkit.Responder
 }
 
 // NewPostEvent creates a new http.Handler for the post event operation
-func NewPostEvent(ctx *middleware.Context, handler PostEventHandler) *PostEvent {
+func NewPostEvent(ctx *httpkit.Context, handler PostEventHandler) *PostEvent {
 	return &PostEvent{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Create new event.
 
 */
 type PostEvent struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  PostEventParams
 	Handler PostEventHandler
 }

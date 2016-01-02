@@ -9,10 +9,10 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
 	"github.com/go-swagger/go-swagger/httpkit/validate"
 	"github.com/go-swagger/go-swagger/strfmt"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // NewFindPetsByStatusParams creates a new FindPetsByStatusParams object
@@ -36,9 +36,9 @@ type FindPetsByStatusParams struct {
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls
-func (o *FindPetsByStatusParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+func (o *FindPetsByStatusParams) BindRequest(r *http.Request, route *httpkit.MatchedRoute) error {
 	var res []error
-	qs := httpkit.Values(r.URL.Query())
+	qs := toolkit.Values(r.URL.Query())
 
 	qStatus, qhkStatus, _ := qs.GetOK("status")
 	if err := o.bindStatus(qStatus, qhkStatus, route.Formats); err != nil {

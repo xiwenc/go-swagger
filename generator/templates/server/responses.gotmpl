@@ -59,7 +59,7 @@ func ({{ .ReceiverName }} *{{ pascalize .Name }}) WithPayload(payload {{ if .Sch
 {{ end }}
 
 // WriteResponse to the client
-func ({{ .ReceiverName }} *{{ pascalize .Name }}) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func ({{ .ReceiverName }} *{{ pascalize .Name }}) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
   {{ range .Headers }}
   // response header {{.Name}}
   rw.Header().Add({{ printf "%q" .Name }}, fmt.Sprintf("%v", {{ .ReceiverName }}.{{ pascalize .Name }}))
@@ -79,7 +79,7 @@ func ({{ .ReceiverName }} *{{ pascalize .Name }}) WriteResponse(rw http.Response
 
 import (
   "net/http"
-  "github.com/go-swagger/go-swagger/httpkit"
+  "github.com/go-swagger/go-swagger/toolkit"
   "github.com/go-swagger/go-swagger/swag"
   "github.com/go-swagger/go-swagger/errors"
   "github.com/go-swagger/go-swagger/httpkit/validate"

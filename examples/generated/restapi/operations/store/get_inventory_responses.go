@@ -7,9 +7,9 @@ import (
 	"net/http"
 
 	"github.com/go-swagger/go-swagger/errors"
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/httpkit/validate"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 /*GetInventoryOK successful operation
@@ -34,7 +34,7 @@ func (o *GetInventoryOK) WithPayload(payload GetInventoryOKBodyBody) *GetInvento
 }
 
 // WriteResponse to the client
-func (o *GetInventoryOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *GetInventoryOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if err := producer.Produce(rw, o.Payload); err != nil {

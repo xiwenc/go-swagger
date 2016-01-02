@@ -35,7 +35,7 @@ func ({{ .ReceiverName }} *{{ pascalize .Name }}) Error() string {
 }
 
 
-func ({{ .ReceiverName }} *{{ pascalize .Name }}) readResponse(response client.Response, consumer httpkit.Consumer, formats strfmt.Registry) error {
+func ({{ .ReceiverName }} *{{ pascalize .Name }}) readResponse(response client.Response, consumer toolkit.Consumer, formats strfmt.Registry) error {
   {{ range .Headers }}
   // response header {{.Name}}
   {{if .Converter }}{{ camelize .Name }}, err := {{ .Converter }}(response.GetHeader("{{ .Name }}"))
@@ -78,7 +78,7 @@ func ({{ .ReceiverName }} *{{ pascalize .Name }}) readResponse(response client.R
 
 import (
   "net/http"
-  "github.com/go-swagger/go-swagger/httpkit"
+  "github.com/go-swagger/go-swagger/toolkit"
   "github.com/go-swagger/go-swagger/swag"
   "github.com/go-swagger/go-swagger/errors"
   "github.com/go-swagger/go-swagger/httpkit/validate"
@@ -94,7 +94,7 @@ type {{ pascalize .Name }}Reader struct {
   formats strfmt.Registry
 }
 
-func ({{ .ReceiverName }} *{{ pascalize .Name }}Reader) ReadResponse(response client.Response, consumer httpkit.Consumer) (interface{}, error) {
+func ({{ .ReceiverName }} *{{ pascalize .Name }}Reader) ReadResponse(response client.Response, consumer toolkit.Consumer) (interface{}, error) {
   switch response.Code() {
   {{ range $key, $value := .Responses }}
     case {{ $key }}:

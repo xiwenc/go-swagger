@@ -6,7 +6,7 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/models"
 )
@@ -22,8 +22,8 @@ type UpdateOneOK struct {
 }
 
 // NewUpdateOneOK creates UpdateOneOK with default headers values
-func NewUpdateOneOK() UpdateOneOK {
-	return UpdateOneOK{}
+func NewUpdateOneOK() *UpdateOneOK {
+	return &UpdateOneOK{}
 }
 
 // WithPayload adds the payload to the update one o k response
@@ -33,7 +33,7 @@ func (o *UpdateOneOK) WithPayload(payload *models.Item) *UpdateOneOK {
 }
 
 // WriteResponse to the client
-func (o *UpdateOneOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *UpdateOneOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {
@@ -55,12 +55,12 @@ type UpdateOneDefault struct {
 }
 
 // NewUpdateOneDefault creates UpdateOneDefault with default headers values
-func NewUpdateOneDefault(code int) UpdateOneDefault {
+func NewUpdateOneDefault(code int) *UpdateOneDefault {
 	if code <= 0 {
 		code = 500
 	}
 
-	return UpdateOneDefault{
+	return &UpdateOneDefault{
 		_statusCode: code,
 	}
 }
@@ -78,7 +78,7 @@ func (o *UpdateOneDefault) WithPayload(payload *models.Error) *UpdateOneDefault 
 }
 
 // WriteResponse to the client
-func (o *UpdateOneDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *UpdateOneDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
 	if o.Payload != nil {

@@ -26,9 +26,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/spec"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // GenerateSupport generates the supporting files for an API
@@ -221,13 +221,13 @@ var mediaTypeNames = map[*regexp.Regexp]string{
 }
 
 var knownProducers = map[string]string{
-	"json": "httpkit.JSONProducer",
-	"yaml": "httpkit.YAMLProducer",
+	"json": "toolkit.JSONProducer",
+	"yaml": "toolkit.YAMLProducer",
 }
 
 var knownConsumers = map[string]string{
-	"json": "httpkit.JSONConsumer",
-	"yaml": "httpkit.YAMLConsumer",
+	"json": "toolkit.JSONConsumer",
+	"yaml": "toolkit.YAMLConsumer",
 }
 
 func getSerializer(sers []GenSerGroup, ext string) (*GenSerGroup, bool) {
@@ -293,12 +293,12 @@ func (a *appGenerator) makeConsumes() (consumes []GenSerGroup, consumesJSON bool
 			AppName:      a.Name,
 			ReceiverName: a.Receiver,
 			Name:         "json",
-			MediaType:    httpkit.JSONMime,
+			MediaType:    toolkit.JSONMime,
 			AllSerializers: []GenSerializer{GenSerializer{
 				AppName:        a.Name,
 				ReceiverName:   a.Receiver,
 				Name:           "json",
-				MediaType:      httpkit.JSONMime,
+				MediaType:      toolkit.JSONMime,
 				Implementation: knownConsumers["json"],
 			}},
 			Implementation: knownConsumers["json"],
@@ -350,12 +350,12 @@ func (a *appGenerator) makeProduces() (produces []GenSerGroup, producesJSON bool
 			AppName:      a.Name,
 			ReceiverName: a.Receiver,
 			Name:         "json",
-			MediaType:    httpkit.JSONMime,
+			MediaType:    toolkit.JSONMime,
 			AllSerializers: []GenSerializer{GenSerializer{
 				AppName:        a.Name,
 				ReceiverName:   a.Receiver,
 				Name:           "json",
-				MediaType:      httpkit.JSONMime,
+				MediaType:      toolkit.JSONMime,
 				Implementation: knownProducers["json"],
 			}},
 			Implementation: knownProducers["json"],

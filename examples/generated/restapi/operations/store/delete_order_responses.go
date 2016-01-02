@@ -6,7 +6,7 @@ package store
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 /*DeleteOrderBadRequest Invalid ID supplied
@@ -22,7 +22,7 @@ func NewDeleteOrderBadRequest() DeleteOrderBadRequest {
 }
 
 // WriteResponse to the client
-func (o *DeleteOrderBadRequest) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *DeleteOrderBadRequest) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(400)
 }
@@ -40,7 +40,7 @@ func NewDeleteOrderNotFound() DeleteOrderNotFound {
 }
 
 // WriteResponse to the client
-func (o *DeleteOrderNotFound) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *DeleteOrderNotFound) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(404)
 }

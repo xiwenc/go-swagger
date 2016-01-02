@@ -23,8 +23,8 @@ import (
 	"testing"
 
 	"github.com/go-swagger/go-swagger/client"
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -106,9 +106,9 @@ func TestBuildRequest_BuildHTTP_Payload(t *testing.T) {
 		return nil
 	})
 	r, _ := newRequest("GET", "/flats/{id}/", reqWrtr)
-	r.SetHeaderParam(httpkit.HeaderContentType, httpkit.JSONMime)
+	r.SetHeaderParam(toolkit.HeaderContentType, toolkit.JSONMime)
 
-	req, err := r.BuildHTTP(httpkit.JSONProducer(), nil)
+	req, err := r.BuildHTTP(toolkit.JSONProducer(), nil)
 	if assert.NoError(t, err) && assert.NotNil(t, req) {
 		assert.Equal(t, "200", req.Header.Get("x-rate-limit"))
 		assert.Equal(t, "world", req.URL.Query().Get("hello"))
@@ -128,9 +128,9 @@ func TestBuildRequest_BuildHTTP_Form(t *testing.T) {
 		return nil
 	})
 	r, _ := newRequest("GET", "/flats/{id}/", reqWrtr)
-	r.SetHeaderParam(httpkit.HeaderContentType, httpkit.JSONMime)
+	r.SetHeaderParam(toolkit.HeaderContentType, toolkit.JSONMime)
 
-	req, err := r.BuildHTTP(httpkit.JSONProducer(), nil)
+	req, err := r.BuildHTTP(toolkit.JSONProducer(), nil)
 	if assert.NoError(t, err) && assert.NotNil(t, req) {
 		assert.Equal(t, "200", req.Header.Get("x-rate-limit"))
 		assert.Equal(t, "world", req.URL.Query().Get("hello"))
@@ -152,16 +152,16 @@ func TestBuildRequest_BuildHTTP_Files(t *testing.T) {
 		return nil
 	})
 	r, _ := newRequest("GET", "/flats/{id}/", reqWrtr)
-	r.SetHeaderParam(httpkit.HeaderContentType, httpkit.JSONMime)
+	r.SetHeaderParam(toolkit.HeaderContentType, toolkit.JSONMime)
 
-	req, err := r.BuildHTTP(httpkit.JSONProducer(), nil)
+	req, err := r.BuildHTTP(toolkit.JSONProducer(), nil)
 	if assert.NoError(t, err) && assert.NotNil(t, req) {
 		assert.Equal(t, "200", req.Header.Get("x-rate-limit"))
 		assert.Equal(t, "world", req.URL.Query().Get("hello"))
 		assert.Equal(t, "/flats/1234/", req.URL.Path)
-		mediaType, params, err := mime.ParseMediaType(req.Header.Get(httpkit.HeaderContentType))
+		mediaType, params, err := mime.ParseMediaType(req.Header.Get(toolkit.HeaderContentType))
 		if assert.NoError(t, err) {
-			assert.Equal(t, httpkit.MultipartFormMime, mediaType)
+			assert.Equal(t, toolkit.MultipartFormMime, mediaType)
 			boundary := params["boundary"]
 			mr := multipart.NewReader(req.Body, boundary)
 			frm, err := mr.ReadForm(1 << 20)

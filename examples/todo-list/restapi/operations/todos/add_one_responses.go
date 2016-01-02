@@ -6,7 +6,7 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/models"
 )
@@ -22,8 +22,8 @@ type AddOneCreated struct {
 }
 
 // NewAddOneCreated creates AddOneCreated with default headers values
-func NewAddOneCreated() AddOneCreated {
-	return AddOneCreated{}
+func NewAddOneCreated() *AddOneCreated {
+	return &AddOneCreated{}
 }
 
 // WithPayload adds the payload to the add one created response
@@ -33,7 +33,7 @@ func (o *AddOneCreated) WithPayload(payload *models.Item) *AddOneCreated {
 }
 
 // WriteResponse to the client
-func (o *AddOneCreated) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *AddOneCreated) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(201)
 	if o.Payload != nil {
@@ -55,12 +55,12 @@ type AddOneDefault struct {
 }
 
 // NewAddOneDefault creates AddOneDefault with default headers values
-func NewAddOneDefault(code int) AddOneDefault {
+func NewAddOneDefault(code int) *AddOneDefault {
 	if code <= 0 {
 		code = 500
 	}
 
-	return AddOneDefault{
+	return &AddOneDefault{
 		_statusCode: code,
 	}
 }
@@ -78,7 +78,7 @@ func (o *AddOneDefault) WithPayload(payload *models.Error) *AddOneDefault {
 }
 
 // WriteResponse to the client
-func (o *AddOneDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *AddOneDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
 	if o.Payload != nil {

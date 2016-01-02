@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/tutorials/todo-list/server-complete/models"
 	"github.com/go-swagger/go-swagger/examples/tutorials/todo-list/server-complete/restapi/operations"
@@ -21,11 +21,11 @@ func configureAPI(api *operations.TodoListAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
 
-	api.JSONConsumer = httpkit.JSONConsumer()
+	api.JSONConsumer = toolkit.JSONConsumer()
 
-	api.JSONProducer = httpkit.JSONProducer()
+	api.JSONProducer = toolkit.JSONProducer()
 
-	api.TodosAddOneHandler = todos.AddOneHandlerFunc(func(params todos.AddOneParams) middleware.Responder {
+	api.TodosAddOneHandler = todos.AddOneHandlerFunc(func(params todos.AddOneParams) httpkit.Responder {
 		ids += 1
 		item := *params.Body
 		item.ID = ids
@@ -33,12 +33,12 @@ func configureAPI(api *operations.TodoListAPI) http.Handler {
 		return todos.NewAddOneCreated().WithPayload(&item)
 	})
 
-	api.TodosDestroyOneHandler = todos.DestroyOneHandlerFunc(func(params todos.DestroyOneParams) middleware.Responder {
+	api.TodosDestroyOneHandler = todos.DestroyOneHandlerFunc(func(params todos.DestroyOneParams) httpkit.Responder {
 		delete(store, params.ID)
 		return todos.NewDestroyOneNoContent()
 	})
 
-	api.TodosFindTodosHandler = todos.FindTodosHandlerFunc(func(params todos.FindTodosParams) middleware.Responder {
+	api.TodosFindTodosHandler = todos.FindTodosHandlerFunc(func(params todos.FindTodosParams) httpkit.Responder {
 		items := make([]*models.Item, 0, params.Limit)
 		for id := range store {
 			if id > params.Since {
@@ -53,7 +53,7 @@ func configureAPI(api *operations.TodoListAPI) http.Handler {
 		return todos.NewFindTodosOK().WithPayload(items)
 	})
 
-	api.TodosUpdateOneHandler = todos.UpdateOneHandlerFunc(func(params todos.UpdateOneParams) middleware.Responder {
+	api.TodosUpdateOneHandler = todos.UpdateOneHandlerFunc(func(params todos.UpdateOneParams) httpkit.Responder {
 		params.Body.ID = params.ID
 		item := *params.Body
 		store[params.ID] = item

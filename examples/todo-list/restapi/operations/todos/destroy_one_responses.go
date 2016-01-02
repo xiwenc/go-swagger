@@ -6,7 +6,7 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/models"
 )
@@ -19,12 +19,12 @@ type DestroyOneNoContent struct {
 }
 
 // NewDestroyOneNoContent creates DestroyOneNoContent with default headers values
-func NewDestroyOneNoContent() DestroyOneNoContent {
-	return DestroyOneNoContent{}
+func NewDestroyOneNoContent() *DestroyOneNoContent {
+	return &DestroyOneNoContent{}
 }
 
 // WriteResponse to the client
-func (o *DestroyOneNoContent) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *DestroyOneNoContent) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(204)
 }
@@ -41,12 +41,12 @@ type DestroyOneDefault struct {
 }
 
 // NewDestroyOneDefault creates DestroyOneDefault with default headers values
-func NewDestroyOneDefault(code int) DestroyOneDefault {
+func NewDestroyOneDefault(code int) *DestroyOneDefault {
 	if code <= 0 {
 		code = 500
 	}
 
-	return DestroyOneDefault{
+	return &DestroyOneDefault{
 		_statusCode: code,
 	}
 }
@@ -64,7 +64,7 @@ func (o *DestroyOneDefault) WithPayload(payload *models.Error) *DestroyOneDefaul
 }
 
 // WriteResponse to the client
-func (o *DestroyOneDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *DestroyOneDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
 	if o.Payload != nil {

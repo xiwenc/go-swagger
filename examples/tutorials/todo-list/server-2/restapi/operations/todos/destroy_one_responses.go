@@ -6,7 +6,7 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/tutorials/todo-list/server-2/models"
 )
@@ -24,7 +24,7 @@ func NewDestroyOneNoContent() *DestroyOneNoContent {
 }
 
 // WriteResponse to the client
-func (o *DestroyOneNoContent) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *DestroyOneNoContent) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(204)
 }
@@ -64,7 +64,7 @@ func (o *DestroyOneDefault) WithPayload(payload *models.Error) *DestroyOneDefaul
 }
 
 // WriteResponse to the client
-func (o *DestroyOneDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *DestroyOneDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
 	if o.Payload != nil {

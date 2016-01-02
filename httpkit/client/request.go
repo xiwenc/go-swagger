@@ -26,8 +26,8 @@ import (
 	"strings"
 
 	"github.com/go-swagger/go-swagger/client"
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // NewRequest creates a new swagger http client request
@@ -70,7 +70,7 @@ var (
 )
 
 // BuildHTTP creates a new http request based on the data from the params
-func (r *request) BuildHTTP(producer httpkit.Producer, registry strfmt.Registry) (*http.Request, error) {
+func (r *request) BuildHTTP(producer toolkit.Producer, registry strfmt.Registry) (*http.Request, error) {
 	// build the data
 	if err := r.writer.WriteToRequest(r, registry); err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ func (r *request) BuildHTTP(producer httpkit.Producer, registry strfmt.Registry)
 
 			mp := multipart.NewWriter(body)
 			defer mp.Close()
-			req.Header.Set(httpkit.HeaderContentType, mp.FormDataContentType())
+			req.Header.Set(toolkit.HeaderContentType, mp.FormDataContentType())
 
 			for fn, v := range r.formFields {
 				if len(v) > 0 {

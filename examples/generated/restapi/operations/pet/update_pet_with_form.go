@@ -6,24 +6,24 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // UpdatePetWithFormHandlerFunc turns a function with the right signature into a update pet with form handler
-type UpdatePetWithFormHandlerFunc func(UpdatePetWithFormParams, interface{}) middleware.Responder
+type UpdatePetWithFormHandlerFunc func(UpdatePetWithFormParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdatePetWithFormHandlerFunc) Handle(params UpdatePetWithFormParams, principal interface{}) middleware.Responder {
+func (fn UpdatePetWithFormHandlerFunc) Handle(params UpdatePetWithFormParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // UpdatePetWithFormHandler interface for that can handle valid update pet with form params
 type UpdatePetWithFormHandler interface {
-	Handle(UpdatePetWithFormParams, interface{}) middleware.Responder
+	Handle(UpdatePetWithFormParams, interface{}) httpkit.Responder
 }
 
 // NewUpdatePetWithForm creates a new http.Handler for the update pet with form operation
-func NewUpdatePetWithForm(ctx *middleware.Context, handler UpdatePetWithFormHandler) *UpdatePetWithForm {
+func NewUpdatePetWithForm(ctx *httpkit.Context, handler UpdatePetWithFormHandler) *UpdatePetWithForm {
 	return &UpdatePetWithForm{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Updates a pet in the store with form data
 
 */
 type UpdatePetWithForm struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  UpdatePetWithFormParams
 	Handler UpdatePetWithFormHandler
 }

@@ -9,10 +9,10 @@ import (
 	"strings"
 
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
 	"github.com/go-swagger/go-swagger/httpkit/security"
 	"github.com/go-swagger/go-swagger/spec"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/restapi/operations/todos"
 )
@@ -33,16 +33,16 @@ func NewSimpleToDoListAPI(spec *spec.Document) *SimpleToDoListAPI {
 /*SimpleToDoListAPI the simple to do list API */
 type SimpleToDoListAPI struct {
 	spec            *spec.Document
-	context         *middleware.Context
+	context         *httpkit.Context
 	handlers        map[string]map[string]http.Handler
 	formats         strfmt.Registry
 	defaultConsumes string
 	defaultProduces string
 	// JSONConsumer registers a consumer for a "application/io.swagger.examples.todo-list.v1+json" mime type
-	JSONConsumer httpkit.Consumer
+	JSONConsumer toolkit.Consumer
 
 	// JSONProducer registers a producer for a "application/io.swagger.examples.todo-list.v1+json" mime type
-	JSONProducer httpkit.Producer
+	JSONProducer toolkit.Producer
 
 	// KeyAuth registers a function that takes a token and returns a principal
 	// it performs authentication based on an api key x-petstore-token provided in the header
@@ -137,9 +137,9 @@ func (o *SimpleToDoListAPI) ServeErrorFor(operationID string) func(http.Response
 }
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
-func (o *SimpleToDoListAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]httpkit.Authenticator {
+func (o *SimpleToDoListAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]toolkit.Authenticator {
 
-	result := make(map[string]httpkit.Authenticator)
+	result := make(map[string]toolkit.Authenticator)
 	for name, scheme := range schemes {
 		switch name {
 
@@ -154,9 +154,9 @@ func (o *SimpleToDoListAPI) AuthenticatorsFor(schemes map[string]spec.SecuritySc
 }
 
 // ConsumersFor gets the consumers for the specified media types
-func (o *SimpleToDoListAPI) ConsumersFor(mediaTypes []string) map[string]httpkit.Consumer {
+func (o *SimpleToDoListAPI) ConsumersFor(mediaTypes []string) map[string]toolkit.Consumer {
 
-	result := make(map[string]httpkit.Consumer)
+	result := make(map[string]toolkit.Consumer)
 	for _, mt := range mediaTypes {
 		switch mt {
 
@@ -170,9 +170,9 @@ func (o *SimpleToDoListAPI) ConsumersFor(mediaTypes []string) map[string]httpkit
 }
 
 // ProducersFor gets the producers for the specified media types
-func (o *SimpleToDoListAPI) ProducersFor(mediaTypes []string) map[string]httpkit.Producer {
+func (o *SimpleToDoListAPI) ProducersFor(mediaTypes []string) map[string]toolkit.Producer {
 
-	result := make(map[string]httpkit.Producer)
+	result := make(map[string]toolkit.Producer)
 	for _, mt := range mediaTypes {
 		switch mt {
 
@@ -200,7 +200,7 @@ func (o *SimpleToDoListAPI) HandlerFor(method, path string) (http.Handler, bool)
 
 func (o *SimpleToDoListAPI) initHandlerCache() {
 	if o.context == nil {
-		o.context = middleware.NewRoutableContext(o.spec, o, nil)
+		o.context = httpkit.NewRoutableContext(o.spec, o, nil)
 	}
 
 	if o.handlers == nil {
@@ -231,7 +231,7 @@ func (o *SimpleToDoListAPI) initHandlerCache() {
 
 // Serve creates a http handler to serve the API over HTTP
 // can be used directly in http.ListenAndServe(":8000", api.Serve(nil))
-func (o *SimpleToDoListAPI) Serve(builder middleware.Builder) http.Handler {
+func (o *SimpleToDoListAPI) Serve(builder httpkit.Builder) http.Handler {
 	if len(o.handlers) == 0 {
 		o.initHandlerCache()
 	}

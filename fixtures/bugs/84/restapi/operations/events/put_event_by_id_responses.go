@@ -6,7 +6,7 @@ package events
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 /*PutEventByIDNoContent Successful response
@@ -22,7 +22,7 @@ func NewPutEventByIDNoContent() PutEventByIDNoContent {
 }
 
 // WriteResponse to the client
-func (o *PutEventByIDNoContent) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *PutEventByIDNoContent) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(204)
 }
@@ -40,7 +40,7 @@ func NewPutEventByIDDefault() PutEventByIDDefault {
 }
 
 // WriteResponse to the client
-func (o *PutEventByIDDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *PutEventByIDDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(500)
 }

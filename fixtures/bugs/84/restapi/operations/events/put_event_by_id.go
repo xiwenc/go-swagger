@@ -6,24 +6,24 @@ package events
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // PutEventByIDHandlerFunc turns a function with the right signature into a put event by id handler
-type PutEventByIDHandlerFunc func(PutEventByIDParams) middleware.Responder
+type PutEventByIDHandlerFunc func(PutEventByIDParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn PutEventByIDHandlerFunc) Handle(params PutEventByIDParams) middleware.Responder {
+func (fn PutEventByIDHandlerFunc) Handle(params PutEventByIDParams) httpkit.Responder {
 	return fn(params)
 }
 
 // PutEventByIDHandler interface for that can handle valid put event by id params
 type PutEventByIDHandler interface {
-	Handle(PutEventByIDParams) middleware.Responder
+	Handle(PutEventByIDParams) httpkit.Responder
 }
 
 // NewPutEventByID creates a new http.Handler for the put event by id operation
-func NewPutEventByID(ctx *middleware.Context, handler PutEventByIDHandler) *PutEventByID {
+func NewPutEventByID(ctx *httpkit.Context, handler PutEventByIDHandler) *PutEventByID {
 	return &PutEventByID{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Update existing event.
 
 */
 type PutEventByID struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  PutEventByIDParams
 	Handler PutEventByIDHandler
 }

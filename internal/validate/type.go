@@ -19,10 +19,10 @@ import (
 	"strings"
 
 	"github.com/go-swagger/go-swagger/errors"
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/spec"
 	"github.com/go-swagger/go-swagger/strfmt"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 type typeValidator struct {
@@ -50,7 +50,7 @@ func (t *typeValidator) schemaInfoForType(data interface{}) (string, string) {
 		return "string", "date"
 	case strfmt.DateTime, *strfmt.DateTime:
 		return "string", "datetime"
-	case httpkit.File, *httpkit.File:
+	case toolkit.File, *toolkit.File:
 		return "file", ""
 	case strfmt.URI, *strfmt.URI:
 		return "string", "uri"

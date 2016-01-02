@@ -6,24 +6,24 @@ package user
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // CreateUsersWithListInputHandlerFunc turns a function with the right signature into a create users with list input handler
-type CreateUsersWithListInputHandlerFunc func(CreateUsersWithListInputParams) middleware.Responder
+type CreateUsersWithListInputHandlerFunc func(CreateUsersWithListInputParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn CreateUsersWithListInputHandlerFunc) Handle(params CreateUsersWithListInputParams) middleware.Responder {
+func (fn CreateUsersWithListInputHandlerFunc) Handle(params CreateUsersWithListInputParams) httpkit.Responder {
 	return fn(params)
 }
 
 // CreateUsersWithListInputHandler interface for that can handle valid create users with list input params
 type CreateUsersWithListInputHandler interface {
-	Handle(CreateUsersWithListInputParams) middleware.Responder
+	Handle(CreateUsersWithListInputParams) httpkit.Responder
 }
 
 // NewCreateUsersWithListInput creates a new http.Handler for the create users with list input operation
-func NewCreateUsersWithListInput(ctx *middleware.Context, handler CreateUsersWithListInputHandler) *CreateUsersWithListInput {
+func NewCreateUsersWithListInput(ctx *httpkit.Context, handler CreateUsersWithListInputHandler) *CreateUsersWithListInput {
 	return &CreateUsersWithListInput{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Creates list of users with given input array
 
 */
 type CreateUsersWithListInput struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  CreateUsersWithListInputParams
 	Handler CreateUsersWithListInputHandler
 }

@@ -6,24 +6,24 @@ package events
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // DeleteEventByIDHandlerFunc turns a function with the right signature into a delete event by id handler
-type DeleteEventByIDHandlerFunc func(DeleteEventByIDParams) middleware.Responder
+type DeleteEventByIDHandlerFunc func(DeleteEventByIDParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn DeleteEventByIDHandlerFunc) Handle(params DeleteEventByIDParams) middleware.Responder {
+func (fn DeleteEventByIDHandlerFunc) Handle(params DeleteEventByIDParams) httpkit.Responder {
 	return fn(params)
 }
 
 // DeleteEventByIDHandler interface for that can handle valid delete event by id params
 type DeleteEventByIDHandler interface {
-	Handle(DeleteEventByIDParams) middleware.Responder
+	Handle(DeleteEventByIDParams) httpkit.Responder
 }
 
 // NewDeleteEventByID creates a new http.Handler for the delete event by id operation
-func NewDeleteEventByID(ctx *middleware.Context, handler DeleteEventByIDHandler) *DeleteEventByID {
+func NewDeleteEventByID(ctx *httpkit.Context, handler DeleteEventByIDHandler) *DeleteEventByID {
 	return &DeleteEventByID{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Delete event by id.
 
 */
 type DeleteEventByID struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  DeleteEventByIDParams
 	Handler DeleteEventByIDHandler
 }

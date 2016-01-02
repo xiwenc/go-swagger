@@ -25,9 +25,9 @@ import (
 	"testing"
 
 	"github.com/go-swagger/go-swagger/client"
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/spec"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -53,7 +53,7 @@ func TestRuntime_Canary(t *testing.T) {
 		{false, "task 2 content", 2},
 	}
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		rw.Header().Add(httpkit.HeaderContentType, httpkit.JSONMime)
+		rw.Header().Add(toolkit.HeaderContentType, toolkit.JSONMime)
 		rw.WriteHeader(http.StatusOK)
 		jsongen := json.NewEncoder(rw)
 		jsongen.Encode(result)
@@ -73,7 +73,7 @@ func TestRuntime_Canary(t *testing.T) {
 		res, err := runtime.Submit(&client.Operation{
 			ID:     "getTasks",
 			Params: rwrtr,
-			Reader: client.ResponseReaderFunc(func(response client.Response, consumer httpkit.Consumer) (interface{}, error) {
+			Reader: client.ResponseReaderFunc(func(response client.Response, consumer toolkit.Consumer) (interface{}, error) {
 				if response.Code() == 200 {
 					var result []task
 					if err := consumer.Consume(response.Body(), &result); err != nil {
@@ -133,7 +133,7 @@ func TestRuntime_CustomTransport(t *testing.T) {
 		res, err := runtime.Submit(&client.Operation{
 			ID:     "getTasks",
 			Params: rwrtr,
-			Reader: client.ResponseReaderFunc(func(response client.Response, consumer httpkit.Consumer) (interface{}, error) {
+			Reader: client.ResponseReaderFunc(func(response client.Response, consumer toolkit.Consumer) (interface{}, error) {
 				if response.Code() == 200 {
 					var result []task
 					if err := consumer.Consume(response.Body(), &result); err != nil {
@@ -166,7 +166,7 @@ func TestRuntime_AuthCanary(t *testing.T) {
 			rw.WriteHeader(400)
 			return
 		}
-		rw.Header().Add(httpkit.HeaderContentType, httpkit.JSONMime)
+		rw.Header().Add(toolkit.HeaderContentType, toolkit.JSONMime)
 		rw.WriteHeader(http.StatusOK)
 		jsongen := json.NewEncoder(rw)
 		jsongen.Encode(result)
@@ -186,7 +186,7 @@ func TestRuntime_AuthCanary(t *testing.T) {
 		res, err := runtime.Submit(&client.Operation{
 			ID:     "getTasks",
 			Params: rwrtr,
-			Reader: client.ResponseReaderFunc(func(response client.Response, consumer httpkit.Consumer) (interface{}, error) {
+			Reader: client.ResponseReaderFunc(func(response client.Response, consumer toolkit.Consumer) (interface{}, error) {
 				if response.Code() == 200 {
 					var result []task
 					if err := consumer.Consume(response.Body(), &result); err != nil {
@@ -220,7 +220,7 @@ func TestRuntime_ContentTypeCanary(t *testing.T) {
 			rw.WriteHeader(400)
 			return
 		}
-		rw.Header().Add(httpkit.HeaderContentType, httpkit.JSONMime+";charset=utf-8")
+		rw.Header().Add(toolkit.HeaderContentType, toolkit.JSONMime+";charset=utf-8")
 		rw.WriteHeader(http.StatusOK)
 		jsongen := json.NewEncoder(rw)
 		jsongen.Encode(result)
@@ -240,7 +240,7 @@ func TestRuntime_ContentTypeCanary(t *testing.T) {
 		res, err := runtime.Submit(&client.Operation{
 			ID:     "getTasks",
 			Params: rwrtr,
-			Reader: client.ResponseReaderFunc(func(response client.Response, consumer httpkit.Consumer) (interface{}, error) {
+			Reader: client.ResponseReaderFunc(func(response client.Response, consumer toolkit.Consumer) (interface{}, error) {
 				if response.Code() == 200 {
 					var result []task
 					if err := consumer.Consume(response.Body(), &result); err != nil {

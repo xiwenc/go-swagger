@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/tutorials/todo-list/server-1/restapi/operations"
 	"github.com/go-swagger/go-swagger/examples/tutorials/todo-list/server-1/restapi/operations/todos"
@@ -17,12 +17,12 @@ func configureAPI(api *operations.TodoListAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
 
-	api.JSONConsumer = httpkit.JSONConsumer()
+	api.JSONConsumer = toolkit.JSONConsumer()
 
-	api.JSONProducer = httpkit.JSONProducer()
+	api.JSONProducer = toolkit.JSONProducer()
 
-	api.TodosFindTodosHandler = todos.FindTodosHandlerFunc(func(params todos.FindTodosParams) middleware.Responder {
-		return middleware.NotImplemented("operation todos.FindTodos has not yet been implemented")
+	api.TodosFindTodosHandler = todos.FindTodosHandlerFunc(func(params todos.FindTodosParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation todos.FindTodos has not yet been implemented")
 	})
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))

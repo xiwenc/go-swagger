@@ -8,9 +8,9 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
 	"github.com/go-swagger/go-swagger/strfmt"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // NewUploadFileParams creates a new UploadFileParams object
@@ -31,7 +31,7 @@ type UploadFileParams struct {
 	/*file to upload
 	  In: formData
 	*/
-	File httpkit.File
+	File toolkit.File
 	/*ID of pet to update
 	  Required: true
 	  In: path
@@ -41,12 +41,12 @@ type UploadFileParams struct {
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls
-func (o *UploadFileParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+func (o *UploadFileParams) BindRequest(r *http.Request, route *httpkit.MatchedRoute) error {
 	var res []error
 	if err := r.ParseMultipartForm(32 << 20); err != nil {
 		return err
 	}
-	fds := httpkit.Values(r.Form)
+	fds := toolkit.Values(r.Form)
 
 	fdAdditionalMetadata, fdhkAdditionalMetadata, _ := fds.GetOK("additionalMetadata")
 	if err := o.bindAdditionalMetadata(fdAdditionalMetadata, fdhkAdditionalMetadata, route.Formats); err != nil {
@@ -57,7 +57,7 @@ func (o *UploadFileParams) BindRequest(r *http.Request, route *middleware.Matche
 	if err != nil {
 		res = append(res, errors.New(400, "reading file \"file\" failed: %v", err))
 	} else {
-		o.File = httpkit.File{Data: file, Header: fileHeader}
+		o.File = toolkit.File{Data: file, Header: fileHeader}
 	}
 
 	rPetID, rhkPetID, _ := route.Params.GetOK("petId")

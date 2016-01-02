@@ -6,24 +6,24 @@ package user
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // GetUserByNameHandlerFunc turns a function with the right signature into a get user by name handler
-type GetUserByNameHandlerFunc func(GetUserByNameParams) middleware.Responder
+type GetUserByNameHandlerFunc func(GetUserByNameParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn GetUserByNameHandlerFunc) Handle(params GetUserByNameParams) middleware.Responder {
+func (fn GetUserByNameHandlerFunc) Handle(params GetUserByNameParams) httpkit.Responder {
 	return fn(params)
 }
 
 // GetUserByNameHandler interface for that can handle valid get user by name params
 type GetUserByNameHandler interface {
-	Handle(GetUserByNameParams) middleware.Responder
+	Handle(GetUserByNameParams) httpkit.Responder
 }
 
 // NewGetUserByName creates a new http.Handler for the get user by name operation
-func NewGetUserByName(ctx *middleware.Context, handler GetUserByNameHandler) *GetUserByName {
+func NewGetUserByName(ctx *httpkit.Context, handler GetUserByNameHandler) *GetUserByName {
 	return &GetUserByName{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Get user by user name
 
 */
 type GetUserByName struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  GetUserByNameParams
 	Handler GetUserByNameHandler
 }

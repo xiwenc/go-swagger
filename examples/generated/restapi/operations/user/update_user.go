@@ -6,24 +6,24 @@ package user
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // UpdateUserHandlerFunc turns a function with the right signature into a update user handler
-type UpdateUserHandlerFunc func(UpdateUserParams) middleware.Responder
+type UpdateUserHandlerFunc func(UpdateUserParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdateUserHandlerFunc) Handle(params UpdateUserParams) middleware.Responder {
+func (fn UpdateUserHandlerFunc) Handle(params UpdateUserParams) httpkit.Responder {
 	return fn(params)
 }
 
 // UpdateUserHandler interface for that can handle valid update user params
 type UpdateUserHandler interface {
-	Handle(UpdateUserParams) middleware.Responder
+	Handle(UpdateUserParams) httpkit.Responder
 }
 
 // NewUpdateUser creates a new http.Handler for the update user operation
-func NewUpdateUser(ctx *middleware.Context, handler UpdateUserHandler) *UpdateUser {
+func NewUpdateUser(ctx *httpkit.Context, handler UpdateUserHandler) *UpdateUser {
 	return &UpdateUser{Context: ctx, Handler: handler}
 }
 
@@ -35,7 +35,7 @@ This can only be done by the logged in user.
 
 */
 type UpdateUser struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  UpdateUserParams
 	Handler UpdateUserHandler
 }

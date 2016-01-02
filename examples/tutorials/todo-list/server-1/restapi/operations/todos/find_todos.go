@@ -6,24 +6,24 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // FindTodosHandlerFunc turns a function with the right signature into a find todos handler
-type FindTodosHandlerFunc func(FindTodosParams) middleware.Responder
+type FindTodosHandlerFunc func(FindTodosParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn FindTodosHandlerFunc) Handle(params FindTodosParams) middleware.Responder {
+func (fn FindTodosHandlerFunc) Handle(params FindTodosParams) httpkit.Responder {
 	return fn(params)
 }
 
 // FindTodosHandler interface for that can handle valid find todos params
 type FindTodosHandler interface {
-	Handle(FindTodosParams) middleware.Responder
+	Handle(FindTodosParams) httpkit.Responder
 }
 
 // NewFindTodos creates a new http.Handler for the find todos operation
-func NewFindTodos(ctx *middleware.Context, handler FindTodosHandler) *FindTodos {
+func NewFindTodos(ctx *httpkit.Context, handler FindTodosHandler) *FindTodos {
 	return &FindTodos{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ FindTodos find todos API
 
 */
 type FindTodos struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  FindTodosParams
 	Handler FindTodosHandler
 }

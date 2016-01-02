@@ -6,7 +6,7 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/generated/models"
 )
@@ -33,7 +33,7 @@ func (o *UploadFileOK) WithPayload(payload *models.APIResponse) *UploadFileOK {
 }
 
 // WriteResponse to the client
-func (o *UploadFileOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *UploadFileOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {

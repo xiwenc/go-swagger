@@ -6,24 +6,24 @@ package user
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // LoginUserHandlerFunc turns a function with the right signature into a login user handler
-type LoginUserHandlerFunc func(LoginUserParams) middleware.Responder
+type LoginUserHandlerFunc func(LoginUserParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn LoginUserHandlerFunc) Handle(params LoginUserParams) middleware.Responder {
+func (fn LoginUserHandlerFunc) Handle(params LoginUserParams) httpkit.Responder {
 	return fn(params)
 }
 
 // LoginUserHandler interface for that can handle valid login user params
 type LoginUserHandler interface {
-	Handle(LoginUserParams) middleware.Responder
+	Handle(LoginUserParams) httpkit.Responder
 }
 
 // NewLoginUser creates a new http.Handler for the login user operation
-func NewLoginUser(ctx *middleware.Context, handler LoginUserHandler) *LoginUser {
+func NewLoginUser(ctx *httpkit.Context, handler LoginUserHandler) *LoginUser {
 	return &LoginUser{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Logs user into the system
 
 */
 type LoginUser struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  LoginUserParams
 	Handler LoginUserHandler
 }

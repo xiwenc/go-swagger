@@ -6,24 +6,24 @@ package store
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // PlaceOrderHandlerFunc turns a function with the right signature into a place order handler
-type PlaceOrderHandlerFunc func(PlaceOrderParams) middleware.Responder
+type PlaceOrderHandlerFunc func(PlaceOrderParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn PlaceOrderHandlerFunc) Handle(params PlaceOrderParams) middleware.Responder {
+func (fn PlaceOrderHandlerFunc) Handle(params PlaceOrderParams) httpkit.Responder {
 	return fn(params)
 }
 
 // PlaceOrderHandler interface for that can handle valid place order params
 type PlaceOrderHandler interface {
-	Handle(PlaceOrderParams) middleware.Responder
+	Handle(PlaceOrderParams) httpkit.Responder
 }
 
 // NewPlaceOrder creates a new http.Handler for the place order operation
-func NewPlaceOrder(ctx *middleware.Context, handler PlaceOrderHandler) *PlaceOrder {
+func NewPlaceOrder(ctx *httpkit.Context, handler PlaceOrderHandler) *PlaceOrder {
 	return &PlaceOrder{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Place an order for a pet
 
 */
 type PlaceOrder struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  PlaceOrderParams
 	Handler PlaceOrderHandler
 }

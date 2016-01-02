@@ -6,7 +6,7 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/generated/models"
 )
@@ -33,7 +33,7 @@ func (o *FindPetsByStatusOK) WithPayload(payload []*models.Pet) *FindPetsByStatu
 }
 
 // WriteResponse to the client
-func (o *FindPetsByStatusOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *FindPetsByStatusOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if err := producer.Produce(rw, o.Payload); err != nil {
@@ -55,7 +55,7 @@ func NewFindPetsByStatusBadRequest() FindPetsByStatusBadRequest {
 }
 
 // WriteResponse to the client
-func (o *FindPetsByStatusBadRequest) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *FindPetsByStatusBadRequest) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(400)
 }

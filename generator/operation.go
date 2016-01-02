@@ -24,9 +24,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/spec"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // GenerateServerOperation generates a parameter model, parameter validator, http handler implementations for a given operation
@@ -305,7 +305,7 @@ func (b *codeGenOpBuilder) MakeOperation() (GenOperation, error) {
 	if operation.Responses != nil {
 		for k, v := range operation.Responses.StatusCodeResponses {
 			isSuccess := k/100 == 2
-			gr, err := b.MakeResponse(receiver, swag.ToJSONName(b.Name+" "+httpkit.Statuses[k]), isSuccess, resolver, k, v)
+			gr, err := b.MakeResponse(receiver, swag.ToJSONName(b.Name+" "+toolkit.Statuses[k]), isSuccess, resolver, k, v)
 			if err != nil {
 				return GenOperation{}, err
 			}

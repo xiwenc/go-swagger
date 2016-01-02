@@ -6,7 +6,7 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/tutorials/todo-list/server-complete/models"
 )
@@ -33,7 +33,7 @@ func (o *UpdateOneOK) WithPayload(payload *models.Item) *UpdateOneOK {
 }
 
 // WriteResponse to the client
-func (o *UpdateOneOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *UpdateOneOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {
@@ -78,7 +78,7 @@ func (o *UpdateOneDefault) WithPayload(payload *models.Error) *UpdateOneDefault 
 }
 
 // WriteResponse to the client
-func (o *UpdateOneDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *UpdateOneDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
 	if o.Payload != nil {

@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/go-swagger/go-swagger/errors"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 
 	"github.com/go-swagger/go-swagger/fixtures/bugs/84/models"
 )
@@ -32,7 +32,7 @@ type PostEventParams struct {
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls
-func (o *PostEventParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+func (o *PostEventParams) BindRequest(r *http.Request, route *httpkit.MatchedRoute) error {
 	var res []error
 
 	var body models.Event

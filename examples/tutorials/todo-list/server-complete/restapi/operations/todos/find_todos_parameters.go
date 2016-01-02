@@ -8,9 +8,9 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
 	"github.com/go-swagger/go-swagger/strfmt"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // NewFindTodosParams creates a new FindTodosParams object
@@ -39,9 +39,9 @@ type FindTodosParams struct {
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls
-func (o *FindTodosParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+func (o *FindTodosParams) BindRequest(r *http.Request, route *httpkit.MatchedRoute) error {
 	var res []error
-	qs := httpkit.Values(r.URL.Query())
+	qs := toolkit.Values(r.URL.Query())
 
 	qLimit, qhkLimit, _ := qs.GetOK("limit")
 	if err := o.bindLimit(qLimit, qhkLimit, route.Formats); err != nil {

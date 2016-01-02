@@ -24,10 +24,10 @@ import (
 	"strings"
 
 	"github.com/go-swagger/go-swagger/client"
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/spec"
 	"github.com/go-swagger/go-swagger/strfmt"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // Runtime represents an API client that uses the transport
@@ -35,8 +35,8 @@ import (
 type Runtime struct {
 	DefaultMediaType      string
 	DefaultAuthentication client.AuthInfoWriter
-	Consumers             map[string]httpkit.Consumer
-	Producers             map[string]httpkit.Producer
+	Consumers             map[string]toolkit.Consumer
+	Producers             map[string]toolkit.Producer
 
 	Transport http.RoundTripper
 	Spec      *spec.Document
@@ -52,14 +52,14 @@ type Runtime struct {
 // New creates a new default runtime for a swagger api client.
 func New(swaggerSpec *spec.Document) *Runtime {
 	var rt Runtime
-	rt.DefaultMediaType = httpkit.JSONMime
+	rt.DefaultMediaType = toolkit.JSONMime
 
 	// TODO: actually infer this stuff from the spec
-	rt.Consumers = map[string]httpkit.Consumer{
-		httpkit.JSONMime: httpkit.JSONConsumer(),
+	rt.Consumers = map[string]toolkit.Consumer{
+		toolkit.JSONMime: toolkit.JSONConsumer(),
 	}
-	rt.Producers = map[string]httpkit.Producer{
-		httpkit.JSONMime: httpkit.JSONProducer(),
+	rt.Producers = map[string]toolkit.Producer{
+		toolkit.JSONMime: toolkit.JSONProducer(),
 	}
 	rt.Spec = swaggerSpec
 	rt.Transport = http.DefaultTransport
@@ -119,13 +119,13 @@ func (r *Runtime) Submit(context *client.Operation) (interface{}, error) {
 	}
 
 	// TODO: infer most appropriate content type
-	request.SetHeaderParam(httpkit.HeaderContentType, r.DefaultMediaType)
+	request.SetHeaderParam(toolkit.HeaderContentType, r.DefaultMediaType)
 	var accept []string
 	for k := range r.Consumers {
 		accept = append(accept, k)
 	}
 
-	request.SetHeaderParam(httpkit.HeaderAccept, accept...)
+	request.SetHeaderParam(toolkit.HeaderAccept, accept...)
 
 	if auth == nil && r.DefaultAuthentication != nil {
 		auth = r.DefaultAuthentication
@@ -183,7 +183,7 @@ func (r *Runtime) Submit(context *client.Operation) (interface{}, error) {
 		}
 		fmt.Println(string(b))
 	}
-	ct := res.Header.Get(httpkit.HeaderContentType)
+	ct := res.Header.Get(toolkit.HeaderContentType)
 	if ct == "" { // this should really really never occur
 		ct = r.DefaultMediaType
 	}

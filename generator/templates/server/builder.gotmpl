@@ -7,10 +7,10 @@ package {{.Package}}
 import (
   "strings"
   "net/http"
-  "github.com/go-swagger/go-swagger/httpkit"
+  "github.com/go-swagger/go-swagger/toolkit"
   "github.com/go-swagger/go-swagger/spec"
   "github.com/go-swagger/go-swagger/strfmt"
-  "github.com/go-swagger/go-swagger/httpkit/middleware"
+  "github.com/go-swagger/go-swagger/httpkit"
   "github.com/go-swagger/go-swagger/httpkit/security"
 
   {{ range .DefaultImports }}{{ printf "%q" . }}
@@ -35,16 +35,16 @@ func New{{ pascalize .Name }}API(spec *spec.Document) *{{ pascalize .Name }}API 
 /*{{ pascalize .Name }}API {{ if .Info }}{{ if .Info.Description }}{{.Info.Description}}{{ else }}the {{ humanize .Name }} API{{ end }}{{ end }} */
 type {{ pascalize .Name }}API struct {
   spec            *spec.Document
-  context         *middleware.Context
+  context         *httpkit.Context
   handlers        map[string]map[string]http.Handler
   formats         strfmt.Registry
   defaultConsumes string
   defaultProduces string
   {{range .Consumes}}// {{ pascalize .Name }}Consumer registers a consumer for a "{{ .MediaType }}" mime type
-  {{ pascalize .Name }}Consumer httpkit.Consumer
+  {{ pascalize .Name }}Consumer toolkit.Consumer
   {{end}}
   {{range .Produces}}// {{ pascalize .Name }}Producer registers a producer for a "{{ .MediaType }}" mime type
-  {{ pascalize .Name }}Producer httpkit.Producer
+  {{ pascalize .Name }}Producer toolkit.Producer
   {{end}}
   {{range .SecurityDefinitions}}
   {{if .IsBasicAuth}}// {{ pascalize .ID }}Auth registers a function that takes username and password and returns a principal
@@ -128,9 +128,9 @@ func ({{.ReceiverName}} *{{ pascalize .Name }}API) ServeErrorFor(operationID str
   return {{.ReceiverName}}.ServeError
 }
 // AuthenticatorsFor gets the authenticators for the specified security schemes
-func ({{.ReceiverName}} *{{ pascalize .Name }}API) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]httpkit.Authenticator {
+func ({{.ReceiverName}} *{{ pascalize .Name }}API) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]toolkit.Authenticator {
   {{if .SecurityDefinitions}}
-  result := make(map[string]httpkit.Authenticator)
+  result := make(map[string]toolkit.Authenticator)
   for name, scheme := range schemes {
     switch name {
       {{range .SecurityDefinitions}}
@@ -147,9 +147,9 @@ func ({{.ReceiverName}} *{{ pascalize .Name }}API) AuthenticatorsFor(schemes map
 }
 
 // ConsumersFor gets the consumers for the specified media types
-func ({{.ReceiverName}} *{{ pascalize .Name }}API) ConsumersFor(mediaTypes []string) map[string]httpkit.Consumer {
+func ({{.ReceiverName}} *{{ pascalize .Name }}API) ConsumersFor(mediaTypes []string) map[string]toolkit.Consumer {
   {{if .Consumes}}
-  result := make(map[string]httpkit.Consumer)
+  result := make(map[string]toolkit.Consumer)
   for _, mt := range mediaTypes {
     switch mt {
       {{range .Consumes}}
@@ -167,9 +167,9 @@ func ({{.ReceiverName}} *{{ pascalize .Name }}API) ConsumersFor(mediaTypes []str
 }
 
 // ProducersFor gets the producers for the specified media types
-func ({{.ReceiverName}} *{{ pascalize .Name }}API) ProducersFor(mediaTypes []string) map[string]httpkit.Producer {
+func ({{.ReceiverName}} *{{ pascalize .Name }}API) ProducersFor(mediaTypes []string) map[string]toolkit.Producer {
   {{if.Produces}}
-  result := make(map[string]httpkit.Producer)
+  result := make(map[string]toolkit.Producer)
   for _, mt := range mediaTypes {
     switch mt {
       {{range .Produces}}
@@ -201,7 +201,7 @@ func ({{.ReceiverName}} *{{ pascalize .Name }}API) HandlerFor(method, path strin
 
 func ({{.ReceiverName}} *{{ pascalize .Name }}API) initHandlerCache() {
   if {{.ReceiverName}}.context == nil {
-    {{.ReceiverName}}.context = middleware.NewRoutableContext({{.ReceiverName}}.spec, {{.ReceiverName}}, nil)
+    {{.ReceiverName}}.context = httpkit.NewRoutableContext({{.ReceiverName}}.spec, {{.ReceiverName}}, nil)
   }
   {{if .Operations}}
   if {{ .ReceiverName }}.handlers == nil {
@@ -218,7 +218,7 @@ func ({{.ReceiverName}} *{{ pascalize .Name }}API) initHandlerCache() {
 
 // Serve creates a http handler to serve the API over HTTP
 // can be used directly in http.ListenAndServe(":8000", api.Serve(nil))
-func ({{.ReceiverName}} *{{ pascalize .Name }}API) Serve(builder middleware.Builder) http.Handler {
+func ({{.ReceiverName}} *{{ pascalize .Name }}API) Serve(builder httpkit.Builder) http.Handler {
   if len({{.ReceiverName}}.handlers) == 0 {
     {{.ReceiverName}}.initHandlerCache()
   }

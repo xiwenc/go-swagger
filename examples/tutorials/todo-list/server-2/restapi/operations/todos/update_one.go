@@ -6,24 +6,24 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // UpdateOneHandlerFunc turns a function with the right signature into a update one handler
-type UpdateOneHandlerFunc func(UpdateOneParams) middleware.Responder
+type UpdateOneHandlerFunc func(UpdateOneParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn UpdateOneHandlerFunc) Handle(params UpdateOneParams) middleware.Responder {
+func (fn UpdateOneHandlerFunc) Handle(params UpdateOneParams) httpkit.Responder {
 	return fn(params)
 }
 
 // UpdateOneHandler interface for that can handle valid update one params
 type UpdateOneHandler interface {
-	Handle(UpdateOneParams) middleware.Responder
+	Handle(UpdateOneParams) httpkit.Responder
 }
 
 // NewUpdateOne creates a new http.Handler for the update one operation
-func NewUpdateOne(ctx *middleware.Context, handler UpdateOneHandler) *UpdateOne {
+func NewUpdateOne(ctx *httpkit.Context, handler UpdateOneHandler) *UpdateOne {
 	return &UpdateOne{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ UpdateOne update one API
 
 */
 type UpdateOne struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  UpdateOneParams
 	Handler UpdateOneHandler
 }

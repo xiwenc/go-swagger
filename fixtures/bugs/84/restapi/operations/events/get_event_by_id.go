@@ -6,24 +6,24 @@ package events
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // GetEventByIDHandlerFunc turns a function with the right signature into a get event by id handler
-type GetEventByIDHandlerFunc func(GetEventByIDParams) middleware.Responder
+type GetEventByIDHandlerFunc func(GetEventByIDParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn GetEventByIDHandlerFunc) Handle(params GetEventByIDParams) middleware.Responder {
+func (fn GetEventByIDHandlerFunc) Handle(params GetEventByIDParams) httpkit.Responder {
 	return fn(params)
 }
 
 // GetEventByIDHandler interface for that can handle valid get event by id params
 type GetEventByIDHandler interface {
-	Handle(GetEventByIDParams) middleware.Responder
+	Handle(GetEventByIDParams) httpkit.Responder
 }
 
 // NewGetEventByID creates a new http.Handler for the get event by id operation
-func NewGetEventByID(ctx *middleware.Context, handler GetEventByIDHandler) *GetEventByID {
+func NewGetEventByID(ctx *httpkit.Context, handler GetEventByIDHandler) *GetEventByID {
 	return &GetEventByID{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Get event by id.
 
 */
 type GetEventByID struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  GetEventByIDParams
 	Handler GetEventByIDHandler
 }

@@ -6,24 +6,24 @@ package store
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // GetInventoryHandlerFunc turns a function with the right signature into a get inventory handler
-type GetInventoryHandlerFunc func(interface{}) middleware.Responder
+type GetInventoryHandlerFunc func(interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn GetInventoryHandlerFunc) Handle(principal interface{}) middleware.Responder {
+func (fn GetInventoryHandlerFunc) Handle(principal interface{}) httpkit.Responder {
 	return fn(principal)
 }
 
 // GetInventoryHandler interface for that can handle valid get inventory params
 type GetInventoryHandler interface {
-	Handle(interface{}) middleware.Responder
+	Handle(interface{}) httpkit.Responder
 }
 
 // NewGetInventory creates a new http.Handler for the get inventory operation
-func NewGetInventory(ctx *middleware.Context, handler GetInventoryHandler) *GetInventory {
+func NewGetInventory(ctx *httpkit.Context, handler GetInventoryHandler) *GetInventory {
 	return &GetInventory{Context: ctx, Handler: handler}
 }
 
@@ -35,7 +35,7 @@ Returns a map of status codes to quantities
 
 */
 type GetInventory struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Handler GetInventoryHandler
 }
 

@@ -6,24 +6,24 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // GetPetByIDHandlerFunc turns a function with the right signature into a get pet by id handler
-type GetPetByIDHandlerFunc func(GetPetByIDParams, interface{}) middleware.Responder
+type GetPetByIDHandlerFunc func(GetPetByIDParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn GetPetByIDHandlerFunc) Handle(params GetPetByIDParams, principal interface{}) middleware.Responder {
+func (fn GetPetByIDHandlerFunc) Handle(params GetPetByIDParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // GetPetByIDHandler interface for that can handle valid get pet by id params
 type GetPetByIDHandler interface {
-	Handle(GetPetByIDParams, interface{}) middleware.Responder
+	Handle(GetPetByIDParams, interface{}) httpkit.Responder
 }
 
 // NewGetPetByID creates a new http.Handler for the get pet by id operation
-func NewGetPetByID(ctx *middleware.Context, handler GetPetByIDHandler) *GetPetByID {
+func NewGetPetByID(ctx *httpkit.Context, handler GetPetByIDHandler) *GetPetByID {
 	return &GetPetByID{Context: ctx, Handler: handler}
 }
 
@@ -35,7 +35,7 @@ Returns a single pet
 
 */
 type GetPetByID struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  GetPetByIDParams
 	Handler GetPetByIDHandler
 }

@@ -6,24 +6,24 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // FindHandlerFunc turns a function with the right signature into a find handler
-type FindHandlerFunc func(FindParams, interface{}) middleware.Responder
+type FindHandlerFunc func(FindParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn FindHandlerFunc) Handle(params FindParams, principal interface{}) middleware.Responder {
+func (fn FindHandlerFunc) Handle(params FindParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // FindHandler interface for that can handle valid find params
 type FindHandler interface {
-	Handle(FindParams, interface{}) middleware.Responder
+	Handle(FindParams, interface{}) httpkit.Responder
 }
 
 // NewFind creates a new http.Handler for the find operation
-func NewFind(ctx *middleware.Context, handler FindHandler) *Find {
+func NewFind(ctx *httpkit.Context, handler FindHandler) *Find {
 	return &Find{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Find find API
 
 */
 type Find struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  FindParams
 	Handler FindHandler
 }

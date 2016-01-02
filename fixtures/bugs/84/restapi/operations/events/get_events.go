@@ -6,24 +6,24 @@ package events
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // GetEventsHandlerFunc turns a function with the right signature into a get events handler
-type GetEventsHandlerFunc func() middleware.Responder
+type GetEventsHandlerFunc func() httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn GetEventsHandlerFunc) Handle() middleware.Responder {
+func (fn GetEventsHandlerFunc) Handle() httpkit.Responder {
 	return fn()
 }
 
 // GetEventsHandler interface for that can handle valid get events params
 type GetEventsHandler interface {
-	Handle() middleware.Responder
+	Handle() httpkit.Responder
 }
 
 // NewGetEvents creates a new http.Handler for the get events operation
-func NewGetEvents(ctx *middleware.Context, handler GetEventsHandler) *GetEvents {
+func NewGetEvents(ctx *httpkit.Context, handler GetEventsHandler) *GetEvents {
 	return &GetEvents{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ Get events.
 
 */
 type GetEvents struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Handler GetEventsHandler
 }
 

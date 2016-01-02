@@ -8,9 +8,9 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
 	"github.com/go-swagger/go-swagger/strfmt"
 	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 // NewUpdatePetWithFormParams creates a new UpdatePetWithFormParams object
@@ -41,12 +41,12 @@ type UpdatePetWithFormParams struct {
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls
-func (o *UpdatePetWithFormParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+func (o *UpdatePetWithFormParams) BindRequest(r *http.Request, route *httpkit.MatchedRoute) error {
 	var res []error
 	if err := r.ParseMultipartForm(32 << 20); err != nil {
 		return err
 	}
-	fds := httpkit.Values(r.Form)
+	fds := toolkit.Values(r.Form)
 
 	fdName, fdhkName, _ := fds.GetOK("name")
 	if err := o.bindName(fdName, fdhkName, route.Formats); err != nil {

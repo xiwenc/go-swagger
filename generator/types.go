@@ -24,9 +24,8 @@ import (
 )
 
 var goImports = map[string]string{
-	"inf.Dec":   "speter.net/go/exp/math/dec/inf",
-	"big.Int":   "math/big",
-	"swagger.*": "github.com/go-swagger/go-swagger/httpkit",
+	"inf.Dec": "speter.net/go/exp/math/dec/inf",
+	"big.Int": "math/big",
 }
 
 var zeroes = map[string]string{

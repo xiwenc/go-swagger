@@ -6,7 +6,7 @@ package events
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 /*DeleteEventByIDNoContent Successful response
@@ -22,7 +22,7 @@ func NewDeleteEventByIDNoContent() DeleteEventByIDNoContent {
 }
 
 // WriteResponse to the client
-func (o *DeleteEventByIDNoContent) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *DeleteEventByIDNoContent) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(204)
 }
@@ -40,7 +40,7 @@ func NewDeleteEventByIDDefault() DeleteEventByIDDefault {
 }
 
 // WriteResponse to the client
-func (o *DeleteEventByIDDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *DeleteEventByIDDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(500)
 }

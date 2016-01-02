@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/restapi/operations"
 	"github.com/go-swagger/go-swagger/examples/todo-list/restapi/operations/todos"
@@ -17,25 +17,25 @@ func configureAPI(api *operations.SimpleToDoListAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
 
-	api.JSONConsumer = httpkit.JSONConsumer()
+	api.JSONConsumer = toolkit.JSONConsumer()
 
-	api.JSONProducer = httpkit.JSONProducer()
+	api.JSONProducer = toolkit.JSONProducer()
 
 	api.KeyAuth = func(token string) (interface{}, error) {
 		return nil, errors.NotImplemented("api key auth (key) x-petstore-token from header has not yet been implemented")
 	}
 
-	api.TodosAddOneHandler = todos.AddOneHandlerFunc(func(params todos.AddOneParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation todos.AddOne has not yet been implemented")
+	api.TodosAddOneHandler = todos.AddOneHandlerFunc(func(params todos.AddOneParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation todos.AddOne has not yet been implemented")
 	})
-	api.TodosDestroyOneHandler = todos.DestroyOneHandlerFunc(func(params todos.DestroyOneParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation todos.DestroyOne has not yet been implemented")
+	api.TodosDestroyOneHandler = todos.DestroyOneHandlerFunc(func(params todos.DestroyOneParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation todos.DestroyOne has not yet been implemented")
 	})
-	api.TodosFindHandler = todos.FindHandlerFunc(func(params todos.FindParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation todos.Find has not yet been implemented")
+	api.TodosFindHandler = todos.FindHandlerFunc(func(params todos.FindParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation todos.Find has not yet been implemented")
 	})
-	api.TodosUpdateOneHandler = todos.UpdateOneHandlerFunc(func(params todos.UpdateOneParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation todos.UpdateOne has not yet been implemented")
+	api.TodosUpdateOneHandler = todos.UpdateOneHandlerFunc(func(params todos.UpdateOneParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation todos.UpdateOne has not yet been implemented")
 	})
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))

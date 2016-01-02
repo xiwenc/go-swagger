@@ -6,24 +6,24 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // UploadFileHandlerFunc turns a function with the right signature into a upload file handler
-type UploadFileHandlerFunc func(UploadFileParams, interface{}) middleware.Responder
+type UploadFileHandlerFunc func(UploadFileParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn UploadFileHandlerFunc) Handle(params UploadFileParams, principal interface{}) middleware.Responder {
+func (fn UploadFileHandlerFunc) Handle(params UploadFileParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // UploadFileHandler interface for that can handle valid upload file params
 type UploadFileHandler interface {
-	Handle(UploadFileParams, interface{}) middleware.Responder
+	Handle(UploadFileParams, interface{}) httpkit.Responder
 }
 
 // NewUploadFile creates a new http.Handler for the upload file operation
-func NewUploadFile(ctx *middleware.Context, handler UploadFileHandler) *UploadFile {
+func NewUploadFile(ctx *httpkit.Context, handler UploadFileHandler) *UploadFile {
 	return &UploadFile{Context: ctx, Handler: handler}
 }
 
@@ -33,7 +33,7 @@ uploads an image
 
 */
 type UploadFile struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  UploadFileParams
 	Handler UploadFileHandler
 }

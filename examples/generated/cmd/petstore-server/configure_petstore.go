@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-swagger/go-swagger/errors"
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/generated/restapi/operations"
 	"github.com/go-swagger/go-swagger/examples/generated/restapi/operations/pet"
@@ -20,15 +20,15 @@ func configureAPI(api *operations.PetstoreAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
 
-	api.JSONConsumer = httpkit.JSONConsumer()
+	api.JSONConsumer = toolkit.JSONConsumer()
 
-	api.XMLConsumer = httpkit.ConsumerFunc(func(r io.Reader, target interface{}) error {
+	api.XMLConsumer = toolkit.ConsumerFunc(func(r io.Reader, target interface{}) error {
 		return errors.NotImplemented("xml consumer has not yet been implemented")
 	})
 
-	api.JSONProducer = httpkit.JSONProducer()
+	api.JSONProducer = toolkit.JSONProducer()
 
-	api.XMLProducer = httpkit.ProducerFunc(func(w io.Writer, data interface{}) error {
+	api.XMLProducer = toolkit.ProducerFunc(func(w io.Writer, data interface{}) error {
 		return errors.NotImplemented("xml producer has not yet been implemented")
 	})
 
@@ -36,65 +36,65 @@ func configureAPI(api *operations.PetstoreAPI) http.Handler {
 		return nil, errors.NotImplemented("api key auth (api_key) api_key from header has not yet been implemented")
 	}
 
-	api.PetAddPetHandler = pet.AddPetHandlerFunc(func(params pet.AddPetParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation pet.AddPet has not yet been implemented")
+	api.PetAddPetHandler = pet.AddPetHandlerFunc(func(params pet.AddPetParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation pet.AddPet has not yet been implemented")
 	})
-	api.UserCreateUserHandler = user.CreateUserHandlerFunc(func(params user.CreateUserParams) middleware.Responder {
-		return middleware.NotImplemented("operation user.CreateUser has not yet been implemented")
+	api.UserCreateUserHandler = user.CreateUserHandlerFunc(func(params user.CreateUserParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation user.CreateUser has not yet been implemented")
 	})
-	api.UserCreateUsersWithArrayInputHandler = user.CreateUsersWithArrayInputHandlerFunc(func(params user.CreateUsersWithArrayInputParams) middleware.Responder {
-		return middleware.NotImplemented("operation user.CreateUsersWithArrayInput has not yet been implemented")
+	api.UserCreateUsersWithArrayInputHandler = user.CreateUsersWithArrayInputHandlerFunc(func(params user.CreateUsersWithArrayInputParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation user.CreateUsersWithArrayInput has not yet been implemented")
 	})
-	api.UserCreateUsersWithListInputHandler = user.CreateUsersWithListInputHandlerFunc(func(params user.CreateUsersWithListInputParams) middleware.Responder {
-		return middleware.NotImplemented("operation user.CreateUsersWithListInput has not yet been implemented")
+	api.UserCreateUsersWithListInputHandler = user.CreateUsersWithListInputHandlerFunc(func(params user.CreateUsersWithListInputParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation user.CreateUsersWithListInput has not yet been implemented")
 	})
-	api.StoreDeleteOrderHandler = store.DeleteOrderHandlerFunc(func(params store.DeleteOrderParams) middleware.Responder {
-		return middleware.NotImplemented("operation store.DeleteOrder has not yet been implemented")
+	api.StoreDeleteOrderHandler = store.DeleteOrderHandlerFunc(func(params store.DeleteOrderParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation store.DeleteOrder has not yet been implemented")
 	})
-	api.PetDeletePetHandler = pet.DeletePetHandlerFunc(func(params pet.DeletePetParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation pet.DeletePet has not yet been implemented")
+	api.PetDeletePetHandler = pet.DeletePetHandlerFunc(func(params pet.DeletePetParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation pet.DeletePet has not yet been implemented")
 	})
-	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams) middleware.Responder {
-		return middleware.NotImplemented("operation user.DeleteUser has not yet been implemented")
+	api.UserDeleteUserHandler = user.DeleteUserHandlerFunc(func(params user.DeleteUserParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation user.DeleteUser has not yet been implemented")
 	})
-	api.PetFindPetsByStatusHandler = pet.FindPetsByStatusHandlerFunc(func(params pet.FindPetsByStatusParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation pet.FindPetsByStatus has not yet been implemented")
+	api.PetFindPetsByStatusHandler = pet.FindPetsByStatusHandlerFunc(func(params pet.FindPetsByStatusParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation pet.FindPetsByStatus has not yet been implemented")
 	})
-	api.PetFindPetsByTagsHandler = pet.FindPetsByTagsHandlerFunc(func(params pet.FindPetsByTagsParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation pet.FindPetsByTags has not yet been implemented")
+	api.PetFindPetsByTagsHandler = pet.FindPetsByTagsHandlerFunc(func(params pet.FindPetsByTagsParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation pet.FindPetsByTags has not yet been implemented")
 	})
-	api.StoreGetInventoryHandler = store.GetInventoryHandlerFunc(func(principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation store.GetInventory has not yet been implemented")
+	api.StoreGetInventoryHandler = store.GetInventoryHandlerFunc(func(principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation store.GetInventory has not yet been implemented")
 	})
-	api.StoreGetOrderByIDHandler = store.GetOrderByIDHandlerFunc(func(params store.GetOrderByIDParams) middleware.Responder {
-		return middleware.NotImplemented("operation store.GetOrderByID has not yet been implemented")
+	api.StoreGetOrderByIDHandler = store.GetOrderByIDHandlerFunc(func(params store.GetOrderByIDParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation store.GetOrderByID has not yet been implemented")
 	})
-	api.PetGetPetByIDHandler = pet.GetPetByIDHandlerFunc(func(params pet.GetPetByIDParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation pet.GetPetByID has not yet been implemented")
+	api.PetGetPetByIDHandler = pet.GetPetByIDHandlerFunc(func(params pet.GetPetByIDParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation pet.GetPetByID has not yet been implemented")
 	})
-	api.UserGetUserByNameHandler = user.GetUserByNameHandlerFunc(func(params user.GetUserByNameParams) middleware.Responder {
-		return middleware.NotImplemented("operation user.GetUserByName has not yet been implemented")
+	api.UserGetUserByNameHandler = user.GetUserByNameHandlerFunc(func(params user.GetUserByNameParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation user.GetUserByName has not yet been implemented")
 	})
-	api.UserLoginUserHandler = user.LoginUserHandlerFunc(func(params user.LoginUserParams) middleware.Responder {
-		return middleware.NotImplemented("operation user.LoginUser has not yet been implemented")
+	api.UserLoginUserHandler = user.LoginUserHandlerFunc(func(params user.LoginUserParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation user.LoginUser has not yet been implemented")
 	})
-	api.UserLogoutUserHandler = user.LogoutUserHandlerFunc(func() middleware.Responder {
-		return middleware.NotImplemented("operation user.LogoutUser has not yet been implemented")
+	api.UserLogoutUserHandler = user.LogoutUserHandlerFunc(func() httpkit.Responder {
+		return httpkit.NotImplemented("operation user.LogoutUser has not yet been implemented")
 	})
-	api.StorePlaceOrderHandler = store.PlaceOrderHandlerFunc(func(params store.PlaceOrderParams) middleware.Responder {
-		return middleware.NotImplemented("operation store.PlaceOrder has not yet been implemented")
+	api.StorePlaceOrderHandler = store.PlaceOrderHandlerFunc(func(params store.PlaceOrderParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation store.PlaceOrder has not yet been implemented")
 	})
-	api.PetUpdatePetHandler = pet.UpdatePetHandlerFunc(func(params pet.UpdatePetParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation pet.UpdatePet has not yet been implemented")
+	api.PetUpdatePetHandler = pet.UpdatePetHandlerFunc(func(params pet.UpdatePetParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation pet.UpdatePet has not yet been implemented")
 	})
-	api.PetUpdatePetWithFormHandler = pet.UpdatePetWithFormHandlerFunc(func(params pet.UpdatePetWithFormParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation pet.UpdatePetWithForm has not yet been implemented")
+	api.PetUpdatePetWithFormHandler = pet.UpdatePetWithFormHandlerFunc(func(params pet.UpdatePetWithFormParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation pet.UpdatePetWithForm has not yet been implemented")
 	})
-	api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams) middleware.Responder {
-		return middleware.NotImplemented("operation user.UpdateUser has not yet been implemented")
+	api.UserUpdateUserHandler = user.UpdateUserHandlerFunc(func(params user.UpdateUserParams) httpkit.Responder {
+		return httpkit.NotImplemented("operation user.UpdateUser has not yet been implemented")
 	})
-	api.PetUploadFileHandler = pet.UploadFileHandlerFunc(func(params pet.UploadFileParams, principal interface{}) middleware.Responder {
-		return middleware.NotImplemented("operation pet.UploadFile has not yet been implemented")
+	api.PetUploadFileHandler = pet.UploadFileHandlerFunc(func(params pet.UploadFileParams, principal interface{}) httpkit.Responder {
+		return httpkit.NotImplemented("operation pet.UploadFile has not yet been implemented")
 	})
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))

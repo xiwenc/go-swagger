@@ -15,46 +15,90 @@
 package httpkit
 
 import (
-	"io"
 	"net/http"
-	"strings"
+	"reflect"
 
-	"github.com/go-swagger/go-swagger/swag"
+	"github.com/go-swagger/go-swagger/errors"
+	"github.com/go-swagger/go-swagger/spec"
+	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
-// CanHaveBody returns true if this method can have a body
-func CanHaveBody(method string) bool {
-	mn := strings.ToUpper(method)
-	return mn == "POST" || mn == "PUT" || mn == "PATCH"
+// RequestBinder binds and validates the data from a http request
+type untypedRequestBinder struct {
+	Spec         *spec.Swagger
+	Parameters   map[string]spec.Parameter
+	Formats      strfmt.Registry
+	paramBinders map[string]*untypedParamBinder
 }
 
-// JSONRequest creates a new http request with json headers set
-func JSONRequest(method, urlStr string, body io.Reader) (*http.Request, error) {
-	req, err := http.NewRequest(method, urlStr, body)
-	if err != nil {
-		return nil, err
+// NewRequestBinder creates a new binder for reading a request.
+func newUntypedRequestBinder(parameters map[string]spec.Parameter, spec *spec.Swagger, formats strfmt.Registry) *untypedRequestBinder {
+	binders := make(map[string]*untypedParamBinder)
+	for fieldName, param := range parameters {
+		binders[fieldName] = newUntypedParamBinder(param, spec, formats)
 	}
-	req.Header.Add(HeaderContentType, JSONMime)
-	req.Header.Add(HeaderAccept, JSONMime)
-	return req, nil
-}
-
-// Gettable for things with a method GetOK(string) (data string, hasKey bool, hasValue bool)
-type Gettable interface {
-	GetOK(string) ([]string, bool, bool)
-}
-
-// ReadSingleValue reads a single value from the source
-func ReadSingleValue(values Gettable, name string) string {
-	vv, _, hv := values.GetOK(name)
-	if hv {
-		return vv[len(vv)-1]
+	return &untypedRequestBinder{
+		Parameters:   parameters,
+		paramBinders: binders,
+		Spec:         spec,
+		Formats:      formats,
 	}
-	return ""
 }
 
-// ReadCollectionValue reads a collection value from a string data source
-func ReadCollectionValue(values Gettable, name, collectionFormat string) []string {
-	v := ReadSingleValue(values, name)
-	return swag.SplitByFormat(v, collectionFormat)
+// Bind perform the databinding and validation
+func (o *untypedRequestBinder) Bind(request *http.Request, routeParams RouteParams, consumer toolkit.Consumer, data interface{}) error {
+	val := reflect.Indirect(reflect.ValueOf(data))
+	isMap := val.Kind() == reflect.Map
+	var result []error
+
+	for fieldName, param := range o.Parameters {
+		binder := o.paramBinders[fieldName]
+
+		var target reflect.Value
+		if !isMap {
+			binder.Name = fieldName
+			target = val.FieldByName(fieldName)
+		}
+
+		if isMap {
+			tpe := binder.Type()
+			if tpe == nil {
+				if param.Schema.Type.Contains("array") {
+					tpe = reflect.TypeOf([]interface{}{})
+				} else {
+					tpe = reflect.TypeOf(map[string]interface{}{})
+				}
+			}
+			target = reflect.Indirect(reflect.New(tpe))
+
+		}
+
+		if !target.IsValid() {
+			result = append(result, errors.New(500, "parameter name %q is an unknown field", binder.Name))
+			continue
+		}
+
+		if err := binder.Bind(request, routeParams, consumer, target); err != nil {
+			result = append(result, err)
+			continue
+		}
+
+		if binder.validator != nil {
+			rr := binder.validator.Validate(target.Interface())
+			if rr != nil && rr.HasErrors() {
+				result = append(result, rr.AsError())
+			}
+		}
+
+		if isMap {
+			val.SetMapIndex(reflect.ValueOf(param.Name), target)
+		}
+	}
+
+	if len(result) > 0 {
+		return errors.CompositeValidationError(result...)
+	}
+
+	return nil
 }

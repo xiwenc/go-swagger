@@ -6,7 +6,7 @@ package todos
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/todo-list/models"
 )
@@ -22,8 +22,8 @@ type FindOK struct {
 }
 
 // NewFindOK creates FindOK with default headers values
-func NewFindOK() FindOK {
-	return FindOK{}
+func NewFindOK() *FindOK {
+	return &FindOK{}
 }
 
 // WithPayload adds the payload to the find o k response
@@ -33,7 +33,7 @@ func (o *FindOK) WithPayload(payload []*models.Item) *FindOK {
 }
 
 // WriteResponse to the client
-func (o *FindOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *FindOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if err := producer.Produce(rw, o.Payload); err != nil {
@@ -54,12 +54,12 @@ type FindDefault struct {
 }
 
 // NewFindDefault creates FindDefault with default headers values
-func NewFindDefault(code int) FindDefault {
+func NewFindDefault(code int) *FindDefault {
 	if code <= 0 {
 		code = 500
 	}
 
-	return FindDefault{
+	return &FindDefault{
 		_statusCode: code,
 	}
 }
@@ -77,7 +77,7 @@ func (o *FindDefault) WithPayload(payload *models.Error) *FindDefault {
 }
 
 // WriteResponse to the client
-func (o *FindDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *FindDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(o._statusCode)
 	if o.Payload != nil {

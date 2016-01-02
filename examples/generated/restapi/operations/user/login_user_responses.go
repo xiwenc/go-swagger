@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 )
 
 /*LoginUserOK successful operation
@@ -53,7 +53,7 @@ func (o *LoginUserOK) WithPayload(payload string) *LoginUserOK {
 }
 
 // WriteResponse to the client
-func (o *LoginUserOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *LoginUserOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	// response header X-Expires-After
 	rw.Header().Add("X-Expires-After", fmt.Sprintf("%v", o.XExpiresAfter))
@@ -81,7 +81,7 @@ func NewLoginUserBadRequest() LoginUserBadRequest {
 }
 
 // WriteResponse to the client
-func (o *LoginUserBadRequest) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *LoginUserBadRequest) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(400)
 }

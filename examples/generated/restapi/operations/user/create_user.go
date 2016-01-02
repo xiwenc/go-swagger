@@ -6,24 +6,24 @@ package user
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // CreateUserHandlerFunc turns a function with the right signature into a create user handler
-type CreateUserHandlerFunc func(CreateUserParams) middleware.Responder
+type CreateUserHandlerFunc func(CreateUserParams) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn CreateUserHandlerFunc) Handle(params CreateUserParams) middleware.Responder {
+func (fn CreateUserHandlerFunc) Handle(params CreateUserParams) httpkit.Responder {
 	return fn(params)
 }
 
 // CreateUserHandler interface for that can handle valid create user params
 type CreateUserHandler interface {
-	Handle(CreateUserParams) middleware.Responder
+	Handle(CreateUserParams) httpkit.Responder
 }
 
 // NewCreateUser creates a new http.Handler for the create user operation
-func NewCreateUser(ctx *middleware.Context, handler CreateUserHandler) *CreateUser {
+func NewCreateUser(ctx *httpkit.Context, handler CreateUserHandler) *CreateUser {
 	return &CreateUser{Context: ctx, Handler: handler}
 }
 
@@ -35,7 +35,7 @@ This can only be done by the logged in user.
 
 */
 type CreateUser struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  CreateUserParams
 	Handler CreateUserHandler
 }

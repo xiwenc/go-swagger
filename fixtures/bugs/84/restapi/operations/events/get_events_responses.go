@@ -6,7 +6,7 @@ package events
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/fixtures/bugs/84/models"
 )
@@ -27,7 +27,7 @@ func NewGetEventsOK() GetEventsOK {
 }
 
 // WriteResponse to the client
-func (o *GetEventsOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *GetEventsOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if err := producer.Produce(rw, o.Payload); err != nil {
@@ -49,7 +49,7 @@ func NewGetEventsDefault() GetEventsDefault {
 }
 
 // WriteResponse to the client
-func (o *GetEventsDefault) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *GetEventsDefault) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(500)
 }

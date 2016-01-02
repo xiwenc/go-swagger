@@ -6,24 +6,24 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 )
 
 // FindPetsByTagsHandlerFunc turns a function with the right signature into a find pets by tags handler
-type FindPetsByTagsHandlerFunc func(FindPetsByTagsParams, interface{}) middleware.Responder
+type FindPetsByTagsHandlerFunc func(FindPetsByTagsParams, interface{}) httpkit.Responder
 
 // Handle executing the request and returning a response
-func (fn FindPetsByTagsHandlerFunc) Handle(params FindPetsByTagsParams, principal interface{}) middleware.Responder {
+func (fn FindPetsByTagsHandlerFunc) Handle(params FindPetsByTagsParams, principal interface{}) httpkit.Responder {
 	return fn(params, principal)
 }
 
 // FindPetsByTagsHandler interface for that can handle valid find pets by tags params
 type FindPetsByTagsHandler interface {
-	Handle(FindPetsByTagsParams, interface{}) middleware.Responder
+	Handle(FindPetsByTagsParams, interface{}) httpkit.Responder
 }
 
 // NewFindPetsByTags creates a new http.Handler for the find pets by tags operation
-func NewFindPetsByTags(ctx *middleware.Context, handler FindPetsByTagsHandler) *FindPetsByTags {
+func NewFindPetsByTags(ctx *httpkit.Context, handler FindPetsByTagsHandler) *FindPetsByTags {
 	return &FindPetsByTags{Context: ctx, Handler: handler}
 }
 
@@ -35,7 +35,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 */
 type FindPetsByTags struct {
-	Context *middleware.Context
+	Context *httpkit.Context
 	Params  FindPetsByTagsParams
 	Handler FindPetsByTagsHandler
 }

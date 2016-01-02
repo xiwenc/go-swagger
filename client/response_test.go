@@ -20,7 +20,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +45,7 @@ func TestResponseReaderFunc(t *testing.T) {
 		Header, Message, Body string
 		Code                  int
 	}
-	reader := ResponseReaderFunc(func(r Response, _ httpkit.Consumer) (interface{}, error) {
+	reader := ResponseReaderFunc(func(r Response, _ toolkit.Consumer) (interface{}, error) {
 		b, _ := ioutil.ReadAll(r.Body())
 		actual.Body = string(b)
 		actual.Code = r.Code()

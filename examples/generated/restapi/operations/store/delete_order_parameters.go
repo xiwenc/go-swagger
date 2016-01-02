@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	"github.com/go-swagger/go-swagger/errors"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
+	"github.com/go-swagger/go-swagger/httpkit"
 	"github.com/go-swagger/go-swagger/httpkit/validate"
 	"github.com/go-swagger/go-swagger/strfmt"
 )
@@ -33,7 +33,7 @@ type DeleteOrderParams struct {
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls
-func (o *DeleteOrderParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+func (o *DeleteOrderParams) BindRequest(r *http.Request, route *httpkit.MatchedRoute) error {
 	var res []error
 
 	rOrderID, rhkOrderID, _ := route.Params.GetOK("orderId")

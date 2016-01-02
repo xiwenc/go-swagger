@@ -6,7 +6,7 @@ package pet
 import (
 	"net/http"
 
-	"github.com/go-swagger/go-swagger/httpkit"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/generated/models"
 )
@@ -33,7 +33,7 @@ func (o *GetPetByIDOK) WithPayload(payload *models.Pet) *GetPetByIDOK {
 }
 
 // WriteResponse to the client
-func (o *GetPetByIDOK) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *GetPetByIDOK) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(200)
 	if o.Payload != nil {
@@ -56,7 +56,7 @@ func NewGetPetByIDBadRequest() GetPetByIDBadRequest {
 }
 
 // WriteResponse to the client
-func (o *GetPetByIDBadRequest) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *GetPetByIDBadRequest) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(400)
 }
@@ -74,7 +74,7 @@ func NewGetPetByIDNotFound() GetPetByIDNotFound {
 }
 
 // WriteResponse to the client
-func (o *GetPetByIDNotFound) WriteResponse(rw http.ResponseWriter, producer httpkit.Producer) {
+func (o *GetPetByIDNotFound) WriteResponse(rw http.ResponseWriter, producer toolkit.Producer) {
 
 	rw.WriteHeader(404)
 }

@@ -9,10 +9,10 @@ import (
 	"strings"
 
 	"github.com/go-swagger/go-swagger/httpkit"
-	"github.com/go-swagger/go-swagger/httpkit/middleware"
 	"github.com/go-swagger/go-swagger/httpkit/security"
 	"github.com/go-swagger/go-swagger/spec"
 	"github.com/go-swagger/go-swagger/strfmt"
+	"github.com/go-swagger/go-swagger/toolkit"
 
 	"github.com/go-swagger/go-swagger/examples/generated/restapi/operations/pet"
 	"github.com/go-swagger/go-swagger/examples/generated/restapi/operations/store"
@@ -35,20 +35,20 @@ func NewPetstoreAPI(spec *spec.Document) *PetstoreAPI {
 /*PetstoreAPI This is a sample server Petstore server.  You can find out more about Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).  For this sample, you can use the api key `special-key` to test the authorization filters. */
 type PetstoreAPI struct {
 	spec            *spec.Document
-	context         *middleware.Context
+	context         *httpkit.Context
 	handlers        map[string]map[string]http.Handler
 	formats         strfmt.Registry
 	defaultConsumes string
 	defaultProduces string
 	// JSONConsumer registers a consumer for a "application/json" mime type
-	JSONConsumer httpkit.Consumer
+	JSONConsumer toolkit.Consumer
 	// XMLConsumer registers a consumer for a "application/xml" mime type
-	XMLConsumer httpkit.Consumer
+	XMLConsumer toolkit.Consumer
 
 	// JSONProducer registers a producer for a "application/json" mime type
-	JSONProducer httpkit.Producer
+	JSONProducer toolkit.Producer
 	// XMLProducer registers a producer for a "application/xml" mime type
-	XMLProducer httpkit.Producer
+	XMLProducer toolkit.Producer
 
 	// APIKeyAuth registers a function that takes a token and returns a principal
 	// it performs authentication based on an api key api_key provided in the header
@@ -247,9 +247,9 @@ func (o *PetstoreAPI) ServeErrorFor(operationID string) func(http.ResponseWriter
 }
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
-func (o *PetstoreAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]httpkit.Authenticator {
+func (o *PetstoreAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]toolkit.Authenticator {
 
-	result := make(map[string]httpkit.Authenticator)
+	result := make(map[string]toolkit.Authenticator)
 	for name, scheme := range schemes {
 		switch name {
 
@@ -264,9 +264,9 @@ func (o *PetstoreAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) 
 }
 
 // ConsumersFor gets the consumers for the specified media types
-func (o *PetstoreAPI) ConsumersFor(mediaTypes []string) map[string]httpkit.Consumer {
+func (o *PetstoreAPI) ConsumersFor(mediaTypes []string) map[string]toolkit.Consumer {
 
-	result := make(map[string]httpkit.Consumer)
+	result := make(map[string]toolkit.Consumer)
 	for _, mt := range mediaTypes {
 		switch mt {
 
@@ -283,9 +283,9 @@ func (o *PetstoreAPI) ConsumersFor(mediaTypes []string) map[string]httpkit.Consu
 }
 
 // ProducersFor gets the producers for the specified media types
-func (o *PetstoreAPI) ProducersFor(mediaTypes []string) map[string]httpkit.Producer {
+func (o *PetstoreAPI) ProducersFor(mediaTypes []string) map[string]toolkit.Producer {
 
-	result := make(map[string]httpkit.Producer)
+	result := make(map[string]toolkit.Producer)
 	for _, mt := range mediaTypes {
 		switch mt {
 
@@ -316,7 +316,7 @@ func (o *PetstoreAPI) HandlerFor(method, path string) (http.Handler, bool) {
 
 func (o *PetstoreAPI) initHandlerCache() {
 	if o.context == nil {
-		o.context = middleware.NewRoutableContext(o.spec, o, nil)
+		o.context = httpkit.NewRoutableContext(o.spec, o, nil)
 	}
 
 	if o.handlers == nil {
@@ -427,7 +427,7 @@ func (o *PetstoreAPI) initHandlerCache() {
 
 // Serve creates a http handler to serve the API over HTTP
 // can be used directly in http.ListenAndServe(":8000", api.Serve(nil))
-func (o *PetstoreAPI) Serve(builder middleware.Builder) http.Handler {
+func (o *PetstoreAPI) Serve(builder httpkit.Builder) http.Handler {
 	if len(o.handlers) == 0 {
 		o.initHandlerCache()
 	}
