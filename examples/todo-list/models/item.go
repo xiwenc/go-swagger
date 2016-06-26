@@ -20,10 +20,11 @@ func init() {
 	nullableItemBitmap.Set(1)
 }
 
+// NewItem creates a new item with the bitsets initialized
 func NewItem() *Item {
 	return &Item{
-		__setValues: *bitset.New(3),
-		__nulls:     *bitset.New(3),
+		setValues: *bitset.New(3),
+		nulls:     *bitset.New(3),
 	}
 }
 
@@ -32,8 +33,8 @@ func NewItem() *Item {
 swagger:model item
 */
 type Item struct {
-	__setValues bitset.BitSet
-	__nulls     bitset.BitSet
+	setValues bitset.BitSet
+	nulls     bitset.BitSet
 
 	/* completed
 	 */
@@ -56,17 +57,17 @@ type Item struct {
 
 // FlagCompletedSet flags the completed field as set
 func (m *Item) FlagCompletedSet() {
-	m.__setValues.Set(0)
+	m.setValues.Set(0)
 }
 
 // FlagCompletedUnset flag completed field as not set
 func (m *Item) FlagCompletedUnset() {
-	m.__setValues.Clear(0)
+	m.setValues.Clear(0)
 }
 
 // IsCompletedSet returns true if the value for completed was set
 func (m *Item) IsCompletedSet() bool {
-	return m.__setValues.Test(0) || m.Completed
+	return m.setValues.Test(0) || m.Completed
 }
 
 // SetCompleted set the value of the completed field
@@ -78,7 +79,7 @@ func (m *Item) SetCompleted(value bool) {
 // ClearCompleted clears the value for the completed field
 func (m *Item) ClearCompleted() {
 	m.FlagCompletedUnset()
-	m.__nulls.Clear(0)
+	m.nulls.Clear(0)
 	m.Completed = false
 }
 
@@ -98,34 +99,34 @@ func (m *Item) GetCompletedPtr() *bool {
 
 // FlagDescriptionSet flag the description field as set
 func (m *Item) FlagDescriptionSet() {
-	m.__setValues.Set(1)
+	m.setValues.Set(1)
 }
 
 // FlagDescriptionUnset flags the description field as unset
 func (m *Item) FlagDescriptionUnset() {
-	m.__setValues.Clear(1)
+	m.setValues.Clear(1)
 }
 
 // FlagDescriptionNil flags the description field as nil
 func (m *Item) FlagDescriptionNil() {
 	if nullableItemBitmap.Test(1) {
-		m.__nulls.Set(1)
+		m.nulls.Set(1)
 	}
 }
 
 // FlagDescriptionZero flags the description field as zero
 func (m *Item) FlagDescriptionZero() {
-	m.__nulls.Clear(1)
+	m.nulls.Clear(1)
 }
 
 // IsDescriptionNil returns true if the description field is nil
 func (m *Item) IsDescriptionNil() bool {
-	return nullableItemBitmap.Test(1) && m.__nulls.Test(1)
+	return nullableItemBitmap.Test(1) && m.nulls.Test(1)
 }
 
 // IsDescriptionSet returns true if the description field is set
 func (m *Item) IsDescriptionSet() bool {
-	return m.__setValues.Test(1) || m.Completed
+	return m.setValues.Test(1) || m.Completed
 }
 
 // HasDescriptionValue returns true if the description field has a value
@@ -153,7 +154,7 @@ func (m *Item) ClearDescription() {
 
 // GetDescription value with indication if it should be nil or unset
 func (m *Item) GetDescription() (value string, null bool, haskey bool) {
-	return m.Description, nullableItemBitmap.Test(1) && m.__nulls.Test(1), m.__setValues.Test(1) || len(m.Description) > 0
+	return m.Description, nullableItemBitmap.Test(1) && m.nulls.Test(1), m.setValues.Test(1) || len(m.Description) > 0
 }
 
 // GetDescriptionPtr gets the description field returns nil when unset
@@ -166,12 +167,12 @@ func (m *Item) GetDescriptionPtr() *string {
 
 // FlagIDSet flags id field as set
 func (m *Item) FlagIDSet() {
-	m.__setValues.Set(2)
+	m.setValues.Set(2)
 }
 
 // IsIDSet returns true if the id is set
 func (m *Item) IsIDSet() bool {
-	return m.__setValues.Test(2) || m.ID > 0
+	return m.setValues.Test(2) || m.ID > 0
 }
 
 // SetID sets the id field
@@ -213,37 +214,37 @@ func (m Item) MarshalEasyJSON(out *jwriter.Writer) {
 	out.RawByte('{')
 	first := true
 	_ = first
-	if m.Completed || m.__setValues.Test(0) {
+	if m.Completed || m.setValues.Test(0) {
 		if !first {
 			out.RawByte(',')
 		}
 		first = false
 		out.RawString("\"completed\":")
-		if nullableItemBitmap.Test(0) && m.__nulls.Test(0) {
+		if nullableItemBitmap.Test(0) && m.nulls.Test(0) {
 			out.RawString("null")
 		} else {
 			out.Bool(m.Completed)
 		}
 	}
-	if m.Description != "" || m.__setValues.Test(1) {
+	if m.Description != "" || m.setValues.Test(1) {
 		if !first {
 			out.RawByte(',')
 		}
 		first = false
 		out.RawString("\"description\":")
-		if nullableItemBitmap.Test(1) && m.__nulls.Test(1) {
+		if nullableItemBitmap.Test(1) && m.nulls.Test(1) {
 			out.RawString("null")
 		} else {
 			out.String(m.Description)
 		}
 	}
-	if m.ID != 0 || m.__setValues.Test(2) {
+	if m.ID != 0 || m.setValues.Test(2) {
 		if !first {
 			out.RawByte(',')
 		}
 		first = false
 		out.RawString("\"id\":")
-		if nullableItemBitmap.Test(1) && m.__nulls.Test(1) {
+		if nullableItemBitmap.Test(1) && m.nulls.Test(1) {
 			out.RawString("null")
 		} else {
 			out.Int64(m.ID)
@@ -261,8 +262,8 @@ func (m Item) MarshalJSON() ([]byte, error) {
 
 // UnmarshalEasyJSON set the correct bitmap fields etc when deserializing from JSON
 func (m *Item) UnmarshalEasyJSON(in *jlexer.Lexer) {
-	m.__nulls = *bitset.New(3)
-	m.__setValues = *bitset.New(3)
+	m.nulls = *bitset.New(3)
+	m.setValues = *bitset.New(3)
 	if in.IsNull() {
 		in.Skip()
 		return
@@ -275,16 +276,16 @@ func (m *Item) UnmarshalEasyJSON(in *jlexer.Lexer) {
 			switch key {
 			case "id":
 				m.ID = 0
-				m.__setValues.Set(2)
-				m.__nulls.Set(2)
+				m.setValues.Set(2)
+				m.nulls.Set(2)
 			case "description":
 				m.Description = ""
-				m.__setValues.Set(1)
-				m.__nulls.Set(1)
+				m.setValues.Set(1)
+				m.nulls.Set(1)
 			case "completed":
 				m.Completed = false
-				m.__setValues.Set(0)
-				m.__nulls.Set(0)
+				m.setValues.Set(0)
+				m.nulls.Set(0)
 			default:
 				in.SkipRecursive()
 			}
@@ -295,16 +296,16 @@ func (m *Item) UnmarshalEasyJSON(in *jlexer.Lexer) {
 		switch key {
 		case "id":
 			m.ID = in.Int64()
-			m.__setValues.Set(2)
-			m.__nulls.Clear(2)
+			m.setValues.Set(2)
+			m.nulls.Clear(2)
 		case "description":
 			m.Description = in.String()
-			m.__setValues.Set(1)
-			m.__nulls.Clear(1)
+			m.setValues.Set(1)
+			m.nulls.Clear(1)
 		case "completed":
 			m.Completed = in.Bool()
-			m.__setValues.Set(0)
-			m.__nulls.Clear(0)
+			m.setValues.Set(0)
+			m.nulls.Clear(0)
 		default:
 			in.SkipRecursive()
 		}
@@ -336,7 +337,7 @@ func (m *Item) PatchWith(other *Item) error {
 
 	if other.IsIDSet() {
 		if other.ID == 0 {
-			m.__setValues.Clear(2)
+			m.setValues.Clear(2)
 			m.ID = 0
 		} else {
 			m.SetID(m.ID)
