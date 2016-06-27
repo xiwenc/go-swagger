@@ -2,7 +2,6 @@ package graceful
 
 import (
 	"crypto/tls"
-	"golang.org/x/net/netutil"
 	"log"
 	"net"
 	"net/http"
@@ -11,6 +10,8 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	"golang.org/x/net/netutil"
 )
 
 // Server wraps an http.Server with graceful connection handling.
@@ -61,6 +62,10 @@ type Server struct {
 	// Logger used to notify of errors on startup and on stop.
 	Logger *log.Logger
 
+	// LogFunc can be assigned with a logging function of your choice, allowing
+	// you to use whatever logging approach you would like
+	LogFunc func(format string, args ...interface{})
+
 	// Interrupted is true if the server is handling a SIGINT or SIGTERM
 	// signal and is thus shutting down.
 	Interrupted bool
@@ -81,6 +86,9 @@ type Server struct {
 
 	// connections holds all connections managed by graceful
 	connections map[net.Conn]struct{}
+
+	// idleConnections holds all idle connections managed by graceful
+	idleConnections map[net.Conn]struct{}
 }
 
 // Run serves the http.Handler with graceful shutdown enabled.
@@ -92,12 +100,13 @@ func Run(addr string, timeout time.Duration, n http.Handler) {
 		Timeout:      timeout,
 		TCPKeepAlive: 3 * time.Minute,
 		Server:       &http.Server{Addr: addr, Handler: n},
-		Logger:       DefaultLogger(),
+		// Logger:       DefaultLogger(),
 	}
 
 	if err := srv.ListenAndServe(); err != nil {
 		if opErr, ok := err.(*net.OpError); !ok || (ok && opErr.Op != "accept") {
-			srv.Logger.Fatal(err)
+			srv.log("%s", err)
+			os.Exit(1)
 		}
 	}
 
@@ -233,14 +242,20 @@ func (srv *Server) Serve(listener net.Listener) error {
 		listener = tcpKeepAliveListener{listener.(*net.TCPListener), srv.TCPKeepAlive}
 	}
 
+	// Make our stopchan
+	srv.StopChan()
+
 	// Track connection state
 	add := make(chan net.Conn)
+	idle := make(chan net.Conn)
 	remove := make(chan net.Conn)
 
 	srv.Server.ConnState = func(conn net.Conn, state http.ConnState) {
 		switch state {
 		case http.StateNew:
 			add <- conn
+		case http.StateIdle:
+			idle <- conn
 		case http.StateClosed, http.StateHijacked:
 			remove <- conn
 		}
@@ -252,7 +267,7 @@ func (srv *Server) Serve(listener net.Listener) error {
 	// Manage open connections
 	shutdown := make(chan chan struct{})
 	kill := make(chan struct{})
-	go srv.manageConnections(add, remove, shutdown, kill)
+	go srv.manageConnections(add, idle, remove, shutdown, kill)
 
 	interrupt := srv.interruptChan()
 	// Set up the interrupt handler
@@ -317,25 +332,39 @@ func DefaultLogger() *log.Logger {
 	return log.New(os.Stderr, "[graceful] ", 0)
 }
 
-func (srv *Server) manageConnections(add, remove chan net.Conn, shutdown chan chan struct{}, kill chan struct{}) {
+func (srv *Server) manageConnections(add, idle, remove chan net.Conn, shutdown chan chan struct{}, kill chan struct{}) {
 	var done chan struct{}
 	srv.connections = map[net.Conn]struct{}{}
+	srv.idleConnections = map[net.Conn]struct{}{}
 	for {
 		select {
 		case conn := <-add:
 			srv.connections[conn] = struct{}{}
+		case conn := <-idle:
+			srv.idleConnections[conn] = struct{}{}
 		case conn := <-remove:
 			delete(srv.connections, conn)
+			delete(srv.idleConnections, conn)
 			if done != nil && len(srv.connections) == 0 {
 				done <- struct{}{}
 				return
 			}
 		case done = <-shutdown:
-			if len(srv.connections) == 0 {
+			if len(srv.connections) == 0 && len(srv.idleConnections) == 0 {
 				done <- struct{}{}
 				return
 			}
+			// a shutdown request has been received. if we have open idle
+			// connections, we must close all of them now. this prevents idle
+			// connections from holding the server open while waiting for them to
+			// hit their idle timeout.
+			for k := range srv.idleConnections {
+				if err := k.Close(); err != nil {
+					srv.log("[ERROR] %s", err)
+				}
+			}
 		case <-kill:
+			srv.Server.ConnState = nil
 			for k := range srv.connections {
 				if err := k.Close(); err != nil {
 					srv.log("[ERROR] %s", err)
@@ -381,9 +410,11 @@ func (srv *Server) handleInterrupt(interrupt chan os.Signal, quitting chan struc
 	}
 }
 
-func (srv *Server) log(fmt string, v ...interface{}) {
-	if srv.Logger != nil {
-		srv.Logger.Printf(fmt, v...)
+func (srv *Server) log(format string, args ...interface{}) {
+	if srv.LogFunc != nil {
+		srv.LogFunc(format, args...)
+	} else if srv.Logger != nil {
+		srv.Logger.Printf(format, args...)
 	}
 }
 
