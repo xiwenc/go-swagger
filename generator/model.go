@@ -257,11 +257,12 @@ func makeGenDefinitionHierarchy(name, pkg, container string, schema spec.Schema,
 	}
 
 	gd := &GenDefinition{
-		Package:        mangleName(filepath.Base(pkg), "definitions"),
-		GenSchema:      pg.GenSchema,
-		DependsOn:      pg.Dependencies,
-		DefaultImports: defaultImports,
-		ExtraSchemas:   extras,
+		Package:          mangleName(filepath.Base(pkg), "definitions"),
+		GenSchema:        pg.GenSchema,
+		DependsOn:        pg.Dependencies,
+		DefaultImports:   defaultImports,
+		ExtraSchemas:     extras,
+		IncludeValidator: includeValidator,
 	}
 
 	return gd, nil
