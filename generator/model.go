@@ -1165,6 +1165,12 @@ func (sg *schemaGenContext) buildAliased() error {
 	if sg.GenSchema.IsArray {
 		sg.GenSchema.IsAliased = !strings.HasPrefix(sg.GenSchema.GoType, "[]")
 	}
+	if v, ok := inEasyJSONMap[sg.GenSchema.AliasedType]; ok {
+		sg.GenSchema.JSONIn = v
+	}
+	if v, ok := outEasyJSONMap[sg.GenSchema.AliasedType]; ok {
+		sg.GenSchema.JSONOut = v
+	}
 	return nil
 }
 

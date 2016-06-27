@@ -50,11 +50,7 @@ func ({{ $.ReceiverName}} *{{ pascalize $.Name }}) {{ camelize .Name }}{{ pascal
 {{ define "schemaValueSerializer" }}{{ template "schemaValueSerializerBody" . }}{{ end }}
 {{ define "schemaValueSerializerBody" -}}
 {{ if or .IsComplexObject .IsTuple .IsAdditionalProperties .IsAliased .IsCustomFormatter -}}
-data, err := swag.WriteJSON({{ .ValueExpression }})
-if err != nil {
-  return err
-}
-out.Raw(data)
+out.Raw(swag.WriteJSON({{ .ValueExpression }}))
 return nil
 {{- else if .IsArray -}}
   if out.Error != nil {
@@ -119,13 +115,13 @@ in.Delim(']')
 {{ define "schemaSerializer" }}
 {{ if or .IsComplexObject .IsTuple .IsAdditionalProperties }}{{ template "schemaObjectSerializer" . }}
 {{ else if .IsArray }}{{ template "schemaSliceSerializer" . }}
-{{ else if .IsCustomFormatter }}{{ else }}{{ .JSONOut }}
+{{ else if .IsCustomFormatter }}{{ else }}{{ .JSONOut }}{{ if .IsAliased }}({{ .ReceiverName }}){{ end }}
 return nil
 {{ end }}{{ end }}
 {{ define "schemaDeserializer" }}
 {{ if or .IsComplexObject .IsTuple .IsAdditionalProperties }}{{ template "schemaObjectDeserializer" . }}
 {{ else if .IsArray }}{{ template "schemaSliceDeserializer" . }}
-{{ else if .IsCustomFormatter }}{{ else }}{{ .JSONIn }}
+{{ else if .IsCustomFormatter }}{{ else }}{{ if .IsAliased }}*{{ .ReceiverName }} = {{ end }}{{ .JSONIn }}
 return nil
 {{ end }}{{ end }}
 {{ define "schemaSliceSerializer" }}
@@ -261,6 +257,43 @@ if {{ $.ReceiverName }}.Has{{ pascalize $prop.Name }}Value() {
         return
       }
     }{{ if $prop.IsNullable }}
+  }{{ end }}
+}
+{{ end }}
+{{ if .AdditionalProperties }}
+if {{ .ReceiverName }}.Has{{ pascalize .AdditionalProperties.Name }}Value() {
+  if !first {
+    out.RawByte(',')
+  }
+  first = false
+  out.RawString("\"{{ .AdditionalProperties.Name }}\":")
+  {{ if .AdditionalProperties.IsNullable }}if {{ .ReceiverName }}.Is{{ pascalize .AdditionalProperties.Name }}Nil() {
+    out.RawString("null")
+  } else {
+    {{ end }}if err := {{ .ReceiverName }}.{{ camelize .AdditionalProperties.Name }}{{ pascalize .AdditionalProperties.IndexVar }}WriteJSON(out); err != nil {
+      if out.Error == nil {
+        out.Error = err
+        return
+      }
+    }{{ if .AdditionalProperties.IsNullable }}
+  }{{ end }}
+}
+{{ end }}{{ if .AdditionalItems }}
+ if {{ .ReceiverName }}.Has{{ pascalize .AdditionalItems.Name }}Value() {
+  if !first {
+    out.RawByte(',')
+  }
+  first = false
+  out.RawString("\"{{ .AdditionalItems.Name }}\":")
+  {{ if .AdditionalItems.IsNullable }}if {{ .ReceiverName }}.Is{{ pascalize .AdditionalItems.Name }}Nil() {
+    out.RawString("null")
+  } else {
+    {{ end }}if err := {{ .ReceiverName }}.{{ camelize .AdditionalItems.Name }}{{ pascalize .AdditionalItems.IndexVar }}WriteJSON(out); err != nil {
+      if out.Error == nil {
+        out.Error = err
+        return
+      }
+    }{{ if .AdditionalItems.IsNullable }}
   }{{ end }}
 }
 {{ end }}
